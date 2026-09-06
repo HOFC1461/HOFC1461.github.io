@@ -1,0 +1,46 @@
+# Publica SITE/ en GitHub Pages en cada push a main.
+#
+# El sitio se sube tal cual: es HTML, CSS y JS escritos a mano, sin build ni
+# dependencias que instalar. Por eso no hay paso de compilación aquí — sólo se
+# empaqueta la carpeta y se entrega.
+#
+# La carpeta se llama SITE y queda servida en la raíz del dominio, así que las
+# rutas relativas del index.html (img/…, video/…, site.css) siguen funcionando
+# igual que en local.
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+  # Para volver a publicar sin tener que tocar un archivo.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Un despliegue a la vez. cancel-in-progress queda en false a propósito: si
+# empujas dos veces seguidas, la segunda espera en lugar de matar a la primera
+# a mitad de la subida.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/configure-pages@v6
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: ./SITE
+
+      - id: deployment
+        uses: actions/deploy-pages@v5

@@ -1,0 +1,21 @@
+# Esta carpeta pesa ~140 MB: renders, sesiones de foto y los documentos
+# originales de cada proyecto. Nada de eso se publica — el sitio ya lleva sus
+# propias imágenes optimizadas en SITE/img.
+#
+# Por eso la lista es al revés: se ignora todo y luego se nombra lo que sí entra.
+# Así, cualquier carpeta nueva que dejes aquí queda fuera del repositorio por
+# defecto, en vez de acabar publicada por olvido.
+/*
+
+!/.gitignore
+!/.gitattributes
+!/.github/
+!/.claude/
+!/SITE/
+!/MOTION.md
+!/README.md
+
+# Basura del sistema
+.DS_Store
+Thumbs.db
+desktop.ini
