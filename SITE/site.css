@@ -586,6 +586,7 @@ body > .hero{ scroll-margin-top: 0; }
   position: absolute; left: 0; top: -8%; height: 116%;
 }
 
+
 /* ==========================================================================
    PLATES — the project galleries.
    Uniform rows of equal images read as a contact sheet, not as art direction.
@@ -619,10 +620,25 @@ body > .hero{ scroll-margin-top: 0; }
   width: 100%; height: 116%;
   object-fit: cover; display: block;
 }
+/* On a touch screen the drift does not run (see index.html), so this overheight
+   would be a crop with nothing to justify it -- 8% off the top and 8% off the
+   bottom of every photograph in exchange for a movement that never happens.
+   Without the drift the picture can simply fill its frame. */
+@media (hover: none) and (pointer: coarse){
+  .bleed img[data-para], .frame img[data-para],
+  .shot__f img{
+    top: 0; height: 100%;
+  }
+}
 
-/* The wecare renders are alpha cut-outs, not photographs. Cropping them to
-   fill a frame would slice the packaging, so they sit inside their cell with
-   air around them and a ground to stand on. */
+/* Kept, unused for now. The one section that used it -- the wecare packaging --
+   was taken off the page on 2026-09-10 while he decides whether to show that
+   work; the renders are still in img/wecare and the markup is one commit back.
+   Deleting the rule would just mean rewriting it when the section returns.
+
+   What it does: those renders are alpha cut-outs, not photographs. Cropping
+   them to fill a frame would slice the packaging, so they sit inside their cell
+   with air around them and a ground to stand on. */
 .shot--cut .shot__f{ background: var(--paper-2); }
 /* Cut-outs cannot be over-scaled and cropped -- that would slice the packaging.
    Their travel comes out of the padding instead, so the drift is smaller. */
