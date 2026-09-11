@@ -55,6 +55,19 @@ En **Settings → Pages**, *Source* debe estar en **GitHub Actions** (no en
   quitaron los dos. La página está hecha de filetes y cortes duros.
 - **Las palabras de cartel se miden, no se escalan.** `[data-fit]` resuelve el
   cuerpo desde el ancho a llenar, y las alinea por su tinta, no por su caja.
+- **Las fotos se sirven en varios tamaños.** Cada `<img>` de proyecto lleva
+  `srcset` con una variante de 768 y otra de 1200 px, y un `sizes` que dice qué
+  fracción de la pantalla ocupa *esa* foto (una sola en su fila llena la medida,
+  dos se la reparten, tres la parten en tercios). En el teléfono eso baja el mapa
+  de bits de 103 MB a 28 MB. Si agregas una foto, generá sus variantes y escribí
+  su `sizes`: sin eso el celular vuelve a decodificar el original completo.
+- **`ScrollTrigger.refresh()` no se llama en pleno scroll.** Estaba colgado del
+  `load` de cada imagen, y esas imágenes llegan justo mientras el dedo se mueve;
+  cada llamada es un layout sincrónico de todo el documento. Ahora espera a que
+  el scroll se quede quieto y además compara la altura antes de re-medir: como
+  toda foto vive en una caja con `aspect-ratio` declarado, cargar una imagen no
+  mueve nada y la medición sobra. Lo que sí cambia de altura —tipografías,
+  rotación, el cambio de idioma— pasa `true` y se salta esa comparación.
 - **Idioma.** El interruptor cambia el `lang` del documento. Texto nuevo necesita
   su entrada en el diccionario de `index.html`; abrir la página en
   `#i18n-audit` lista lo que no está cubierto.
