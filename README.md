@@ -12,7 +12,7 @@ proceso de compilación: HTML, CSS y JavaScript escritos a mano.
 SITE/                 lo único que se publica
   index.html          la página entera, incluido el diccionario ES/EN
   site.css            la única hoja de estilos
-  print.css           la misma página, paginada en A4 horizontal
+  print.css           la misma página, compuesta en hojas A4 horizontales
   img/                imágenes optimizadas para web
   video/              portada y hydrofoil
 tools/pdf.mjs         imprime el sitio a PDF con Chromium
@@ -92,12 +92,27 @@ desplazó.
 - **El papel impreso es parte del diseño.** `print.css` no es un respaldo: la
   hoja es horizontal porque es la forma en que está dibujada la composición, y
   sin márgenes de página porque el papel es color hueso y ningún motor de
-  impresión pinta el margen. Dos cosas que conviene saber si se toca: Chromium
-  resuelve las *media queries* de impresión contra la hoja medida en **puntos**
-  —842 en A4 horizontal— mientras arma la página en píxeles CSS, donde esa
-  misma hoja mide 1123; por eso las reglas de dos columnas del sitio, todas por
-  encima de 860, se repiten ahí sin consulta. Y el aire contra el borde del
-  papel lo carga cada bloque que puede empezar una hoja, no la página.
+  impresión pinta el margen. El aire contra el borde lo carga cada bloque que
+  puede empezar una hoja, no la página.
+- **Las hojas de proyecto se componen, no se vierten.** Un scroll tiene una
+  columna y no tiene final; una hoja tiene dos dimensiones y un piso duro.
+  Vertida tal cual, la misma columna daba una página de puro texto, luego una
+  de una sola foto, luego una a medio llenar porque la siguiente fila de
+  láminas no cabía por un centímetro. Así que en papel cada artículo es una
+  rejilla de doce columnas —láminas a la izquierda, lo que se lee en una
+  columna más angosta a la derecha— y los envoltorios que existen para centrar
+  un scroll (`.wrap`, `.band`, `.phead__meta`, `.gal`) se quitan de en medio
+  con `display:contents`. Las tres composiciones están escritas a mano, una por
+  proyecto: no hay regla que acomode seis, cuatro y tres fotografías de formas
+  distintas en páginas iguales.
+- **Dos cosas que Chromium hace distinto al imprimir.** Contesta las *media
+  queries* de ancho contra la hoja medida en **puntos** —842 en A4 horizontal—
+  mientras arma la página en píxeles CSS, donde esa misma hoja mide 1123: por
+  eso las reglas de dos columnas del sitio, todas por encima de 860, se repiten
+  en `print.css` sin consulta. Y un marco con proporción declarada al que se le
+  fija la altura resuelve su **ancho** desde la proporción: si no se le dice
+  `width`, la lámina se angosta sola y la fila deja de llegar a su propio
+  borde.
 - **Idioma.** El interruptor cambia el `lang` del documento. Texto nuevo necesita
   su entrada en el diccionario de `index.html`; abrir la página en
   `#i18n-audit` lista lo que no está cubierto.
