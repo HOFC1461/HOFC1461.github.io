@@ -11,6 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="site.css">
+<link rel="stylesheet" href="print.css" media="print">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" defer></script>
@@ -50,6 +51,13 @@
     <span class="label subhead hero__kicker enter enter--1">Diseño Industrial</span>
     <h1 class="display t-hero hero__title enter enter--1">Portafolio</h1>
 
+    <!-- The cover signature, for the printed form only. On screen the masthead
+         carries his name above every view of the page; a sheet of paper has no
+         masthead, and a cover that does not say whose portfolio it is fails at
+         the one thing a cover is for. Not in the dictionary below: a name is
+         the same word in both languages. -->
+    <p class="hero__name">Hedmon Fabian Cervantes G&oacute;mez</p>
+
     <div class="hero__meta enter enter--2">
       <p class="lede" style="max-width:34ch;">
         Producto y servicio desde la intersección entre el diseño y los negocios:
@@ -70,7 +78,7 @@
 </section>
 
 <!-- ═══ STATEMENT ═══ -->
-<section class="wrap band">
+<section class="wrap band statement-page">
   <span class="label subhead" style="margin-bottom:var(--s5);">Enfoque</span>
   <p class="statement rise">
     Concibo el diseño como una herramienta para generar conexiones

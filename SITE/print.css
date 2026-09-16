@@ -1,0 +1,226 @@
+/* ==========================================================================
+   PRINT — the same page, paginated.
+
+   A portfolio gets sent as a file as often as it gets opened as a URL, so the
+   printed form is part of the design and not a fallback. Nothing here is a
+   second layout: the page is the page. What changes is what a sheet of paper
+   cannot do — the fixed header, the footage, the motion that only exists while
+   something is scrolling — plus the decisions a scroll never has to make,
+   which are where one page ends and the next begins.
+
+   A4 landscape, because that is the shape the composition was drawn in. At
+   portrait width every two-column grid on the page (.split, .cv, .phead__meta,
+   .close__head) falls below its own breakpoint and the whole portfolio stacks
+   into one mobile column. Landscape lands at 1123px, above all of them, so the
+   sheet holds the layout the site was designed with.
+   ========================================================================== */
+
+@page{
+  size: A4 landscape;
+  /* No margin at all, because a page margin cannot be given a colour: the
+     canvas background stops at the content box, and every printing engine
+     leaves the margin band white. This page is warm paper, not white, and a
+     white strip along the top and bottom of every sheet -- with the plates
+     bleeding off the sides between them -- reads as a misprint rather than as
+     a margin. So the sheet is the page, and the air that keeps type off the
+     paper edge is set below, on the blocks that can begin one. */
+  margin: 0;
+}
+
+@media print{
+
+  /* ---------- ground ---------- */
+  :root{
+    --gutter: 14mm;   /* the side margin the sheet does not have */
+    --maxw: none;     /* the page IS the measure */
+  }
+  html, body{ background: var(--paper); }
+
+  /* ---------- what a sheet cannot carry ---------- */
+  .masthead,
+  .progress,
+  .scroll-cue,
+  .langsw,
+  .entry__go{ display: none !important; }
+
+  /* Section hairlines mark a change of subject inside a scroll. Every one of
+     them now falls on a page break, where the edge of the sheet already says
+     the same thing, and a rule ruled across the first line of a page reads as
+     a printing error. */
+  hr.rule{ display: none !important; }
+
+  /* ---------- motion, resolved to its end state ----------
+     Every animated element is published in its finished position: nothing is
+     mid-reveal, clipped to nothing, or held at .18 opacity because the scroll
+     never reached it. The !important is aimed at the inline styles the motion
+     layer writes, which a stylesheet cannot otherwise outrank. */
+  .js .reveal > img,
+  .js .reveal > video{ clip-path: none !important; }
+  .js .rise,
+  .js .shot__cap,
+  .statement__w{ opacity: 1 !important; transform: none !important; }
+  .js .rule.reveal{ transform: none !important; }
+  .enter,
+  .hero__title.enter{ animation: none !important; opacity: 1 !important; transform: none !important; }
+  .lift__i,
+  [data-lift],
+  .bleed img[data-para],
+  .frame img[data-para],
+  .shot__f img{ transform: none !important; }
+
+  /* ---------- footage → its own poster frame ----------
+     A <video> prints as a blank box. Both clips already ship the frame they
+     were chosen for; the poster becomes the ground of the element the video
+     was filling, so the composition is unchanged. */
+  .hero__video,
+  .bleed video{ display: none !important; }
+  .hero{
+    background: var(--paper-deep) url(img/poster/hero-chairs.jpg) center / cover no-repeat;
+  }
+  #hydrofoil .bleed--over{
+    background: var(--paper-deep) url(img/poster/hydrofoil.jpg) center / cover no-repeat;
+  }
+
+  /* ---------- the wide layout, restated ----------
+     Chromium answers a width query in print against the sheet measured in
+     POINTS -- 842 for A4 landscape -- while it lays the page out in CSS
+     pixels, where that same sheet is 1123 wide. Every two-column rule on this
+     site sits at 860 or 900, so on paper all of them silently fail and the
+     portfolio prints as the phone layout: one column, a portrait as wide as
+     the sheet, a curriculum spilling onto a second page. They are restated
+     here without a query, because on a sheet this wide there is no other
+     layout the page could be asking for.
+
+     The same arithmetic makes the narrow rules at 859 match when they must
+     not, so the two they set are put back as well. */
+  .entry__grid{ grid-template-columns: 1fr auto; align-items: center; gap: var(--s7); }
+  .entry__art{ order: 0; justify-content: flex-end; }
+  .entry__cut{ height: clamp(4.5rem, 10vw, 10rem); }
+  .entry__cut--wide{ height: clamp(3.5rem, 7.5vw, 7.5rem); }
+
+  .split{ grid-template-columns: 1.15fr .85fr; align-items: center; gap: var(--s7); }
+  .split--wide{ grid-template-columns: .78fr 1fr; }
+  .split--wide .lede{ max-width: 62ch; }
+
+  .cv{ grid-template-columns: 1.3fr 1fr; gap: var(--s8); }
+  .role--now::before{ left: calc(var(--s4) * -1); }
+
+  .phead__meta{ grid-template-columns: 1.25fr 1fr; align-items: start; gap: var(--s7); }
+
+  .close__head{
+    grid-template-columns: 1.25fr 1fr;
+    grid-template-areas: "eyebrow eyebrow" "title sheet";
+    column-gap: var(--s7); row-gap: 0;
+    align-items: start;
+  }
+  .close__eyebrow{ grid-area: eyebrow; }
+  .close__col{ grid-area: title; padding-top: var(--s5); }
+  .spec--close{ grid-area: sheet; }
+  .spec--close > div:first-child{ border-top: 0; padding-top: var(--s5); }
+
+  /* ---------- pagination ----------
+     One subject per sheet. The opening frame, the statement and the closing
+     band each take a whole page and are centred in it; every project starts on
+     its own. Below that, the rule is only that nothing indivisible may be cut:
+     a picture and its caption, a role and its dates, a row of plates. */
+  .hero{
+    min-height: 0;
+    height: 210mm;              /* the whole sheet */
+    break-after: page;
+  }
+  /* 200, not the 210 the sheet measures: a page filled to its own exact height
+     rounds the wrong way often enough to spill a blank sheet after it. */
+  .statement-page,
+  #trabajo,
+  .close{
+    min-height: 200mm;
+    display: grid;
+    align-content: center;
+  }
+  #perfil,
+  #trayectoria,
+  #trabajo,
+  body > article,
+  .close{ break-before: page; }
+
+  .split, .cv, .notes, .gal__row, .shot, .role,
+  .spec > div, .entry, .close__head, .spec__crest,
+  .kit, .tags, figure{ break-inside: avoid; }
+  h2, h3, .label.subhead{ break-after: avoid; }
+
+  /* ---------- the air at the paper edge ----------
+     With no page margin, every block that can begin a sheet has to carry its
+     own. These are all of them: a band, a project head, a spec sheet, a row of
+     plates, a block of notes, and the lone labels that introduce a gallery.
+     The gallery's case is the one worth naming -- its rows are held together
+     by a gap, and a gap is not inherited by the row that lands at the top of
+     the next sheet. Moved onto the row itself as padding, the same measure
+     separates two rows on one page and holds the first row clear of the paper
+     above it. Both edges, not just the top: a row that lands at the foot of a
+     sheet has nothing below it to push it clear. */
+  .band{ padding-block: 12mm; }
+  .project__head{ padding-block: 12mm 0; }
+  .phead__meta{ padding-block: 12mm; break-inside: avoid; }
+  .gal{ gap: 0; }
+  .gal__row{ padding-block: 8mm; }
+  .notes{ padding-block: 8mm; }
+  .band > .label.subhead{ padding-top: 8mm; }
+
+  /* ---------- plates ----------
+     16/9 over the full width of a landscape sheet is 632pt of a 794pt page:
+     the cover would take the whole sheet and push the poster word it belongs
+     to onto the one before. Cropped to 2.4:1 the pair reads as one opening
+     spread, which is what it is on screen. */
+  .bleed{ aspect-ratio: 2.2; }
+
+  /* Keep the drift's overheight from cropping the subject out of a frame that
+     is no longer moving. */
+  .bleed img[data-para],
+  .frame img[data-para]{ position: static; height: 100%; top: auto; }
+
+  /* The cover signature. Display face at a size that reads as a byline under
+     the title rather than as a second heading beside it. */
+  .hero__name{
+    display: block;
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.3rem;
+    letter-spacing: -.01em;
+    color: var(--ink);
+  }
+
+  /* A paragraph set to a third of a landscape sheet is a caption. This one is
+     the only thing on its page and it is what the portfolio is arguing, so it
+     is set to the size that claim deserves and given a measure that still
+     breaks where the sense does. */
+  .statement-page .statement{ font-size: 3.35rem; max-width: 23ch; }
+
+  /* ---------- index ---------- */
+  .entry{ padding-block: var(--s5); }
+
+  /* ---------- the curriculum, held to one sheet ----------
+     Experience, tools, education and languages are read together or they are
+     read as two half-pages of a list. Everything that separates them is a step
+     on the page's own spacing scale, so the whole block is tightened by moving
+     the scale itself rather than by unpicking a dozen rules -- including the
+     ones set inline in the markup, which nothing else here could reach. */
+  #trayectoria{
+    --s3: .7rem; --s4: .85rem; --s5: 1rem; --s6: 1.25rem; --s7: 1.75rem; --s8: 4rem;
+  }
+  /* The sheet opens on this section, so the band's own top padding is a second
+     margin stacked on the page's. */
+  #trayectoria .band{ padding-block: 10mm; }
+  #trayectoria .kit__i{ grid-template-rows: 22px auto; }
+  #trayectoria .role__b{ max-width: none; }   /* the column is the measure */
+
+  /* A portrait set to the height of a scroll is taller than the sheet it now
+     has to sit on, and an image that does not fit its page leaves its own
+     empty frame behind on the one before. */
+  .frame{ max-height: 150mm; }
+
+  /* ---------- links ---------- */
+  /* On paper an underlined mailto reads as a smudge; the address is already
+     written out in full beside its label. */
+  a{ text-decoration: none; }
+}

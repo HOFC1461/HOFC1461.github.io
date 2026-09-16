@@ -12,8 +12,10 @@ proceso de compilación: HTML, CSS y JavaScript escritos a mano.
 SITE/                 lo único que se publica
   index.html          la página entera, incluido el diccionario ES/EN
   site.css            la única hoja de estilos
+  print.css           la misma página, paginada en A4 horizontal
   img/                imágenes optimizadas para web
   video/              portada y hydrofoil
+tools/pdf.mjs         imprime el sitio a PDF con Chromium
 .github/workflows/    el despliegue a GitHub Pages
 MOTION.md             análisis del video de referencia y qué se tomó de él
 ```
@@ -44,6 +46,25 @@ git add -A && git commit -m "…" && git push
 En **Settings → Pages**, *Source* debe estar en **GitHub Actions** (no en
 "Deploy from a branch").
 
+## Exportar el PDF
+
+El PDF que se manda por correo sale del sitio, no de un archivo aparte: el
+script sirve `SITE/`, lo abre en Chromium y lo imprime con `print.css`. Salen
+dos, español e inglés, en `dist/` —que no entra al repositorio.
+
+```bash
+npm i -D playwright && npx playwright install chromium
+node tools/pdf.mjs                 # ambos idiomas
+node tools/pdf.mjs --lang es       # sólo uno
+```
+
+Cualquiera puede sacar el suyo desde el navegador con Ctrl+P: `print.css` está
+enlazado en la página con `media="print"`, así que la vista previa de impresión
+es el mismo documento. Lo que el script agrega es el estado en que la página
+tiene que estar antes de imprimir —cada foto descargada en su tamaño original,
+cada revelado resuelto— porque nada de eso ocurre en una página que nunca se
+desplazó.
+
 ## Decisiones que conviene conocer antes de tocar nada
 
 - **Tipografía.** `--font-display` es Inter Tight, una grotesca. El sitio nació
@@ -68,6 +89,15 @@ En **Settings → Pages**, *Source* debe estar en **GitHub Actions** (no en
   toda foto vive en una caja con `aspect-ratio` declarado, cargar una imagen no
   mueve nada y la medición sobra. Lo que sí cambia de altura —tipografías,
   rotación, el cambio de idioma— pasa `true` y se salta esa comparación.
+- **El papel impreso es parte del diseño.** `print.css` no es un respaldo: la
+  hoja es horizontal porque es la forma en que está dibujada la composición, y
+  sin márgenes de página porque el papel es color hueso y ningún motor de
+  impresión pinta el margen. Dos cosas que conviene saber si se toca: Chromium
+  resuelve las *media queries* de impresión contra la hoja medida en **puntos**
+  —842 en A4 horizontal— mientras arma la página en píxeles CSS, donde esa
+  misma hoja mide 1123; por eso las reglas de dos columnas del sitio, todas por
+  encima de 860, se repiten ahí sin consulta. Y el aire contra el borde del
+  papel lo carga cada bloque que puede empezar una hoja, no la página.
 - **Idioma.** El interruptor cambia el `lang` del documento. Texto nuevo necesita
   su entrada en el diccionario de `index.html`; abrir la página en
   `#i18n-audit` lista lo que no está cubierto.
