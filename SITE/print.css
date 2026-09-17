@@ -1,0 +1,594 @@
+/* ==========================================================================
+   PRINT — the same page, paginated.
+
+   A portfolio gets sent as a file as often as it gets opened as a URL, so the
+   printed form is part of the design and not a fallback. Nothing here is a
+   second layout: the page is the page. What changes is what a sheet of paper
+   cannot do — the fixed header, the footage, the motion that only exists while
+   something is scrolling — plus the decisions a scroll never has to make,
+   which are where one page ends and the next begins.
+
+   A4 landscape, because that is the shape the composition was drawn in. At
+   portrait width every two-column grid on the page (.split, .cv, .phead__meta,
+   .close__head) falls below its own breakpoint and the whole portfolio stacks
+   into one mobile column. Landscape lands at 1123px, above all of them, so the
+   sheet holds the layout the site was designed with.
+   ========================================================================== */
+
+@page{
+  size: A4 landscape;
+  /* No margin at all, because a page margin cannot be given a colour: the
+     canvas background stops at the content box, and every printing engine
+     leaves the margin band white. This page is warm paper, not white, and a
+     white strip along the top and bottom of every sheet -- with the plates
+     bleeding off the sides between them -- reads as a misprint rather than as
+     a margin. So the sheet is the page, and the air that keeps type off the
+     paper edge is set below, on the blocks that can begin one. */
+  margin: 0;
+}
+
+@media print{
+
+  /* ---------- ground ---------- */
+  :root{
+    --gutter: 14mm;   /* the side margin the sheet does not have */
+    --maxw: none;     /* the page IS the measure */
+  }
+  html, body{ background: var(--paper); }
+
+  /* ---------- what a sheet cannot carry ---------- */
+  .masthead,
+  .progress,
+  .scroll-cue,
+  .langsw,
+  .entry__go{ display: none !important; }
+
+  /* Section hairlines mark a change of subject inside a scroll. Every one of
+     them now falls on a page break, where the edge of the sheet already says
+     the same thing, and a rule ruled across the first line of a page reads as
+     a printing error. */
+  hr.rule{ display: none !important; }
+
+  /* ---------- motion, resolved to its end state ----------
+     Every animated element is published in its finished position: nothing is
+     mid-reveal, clipped to nothing, or held at .18 opacity because the scroll
+     never reached it. The !important is aimed at the inline styles the motion
+     layer writes, which a stylesheet cannot otherwise outrank. */
+  .js .reveal > img,
+  .js .reveal > video{ clip-path: none !important; }
+  .js .rise,
+  .js .shot__cap,
+  .statement__w{ opacity: 1 !important; transform: none !important; }
+  .js .rule.reveal{ transform: none !important; }
+  .enter,
+  .hero__title.enter{ animation: none !important; opacity: 1 !important; transform: none !important; }
+  .lift__i,
+  [data-lift],
+  .bleed img[data-para],
+  .frame img[data-para],
+  .shot__f img{ transform: none !important; }
+
+  /* ---------- footage → its own poster frame ----------
+     A <video> prints as a blank box. Both clips already ship the frame they
+     were chosen for; the poster becomes the ground of the element the video
+     was filling, so the composition is unchanged. */
+  .hero__video,
+  .bleed video{ display: none !important; }
+  /* Paper takes the composed still instead of the three clips. */
+  .filmstrip{ display: none !important; }
+  .filmstrip + .filmstrip__still{ display: block; }
+  .hero{
+    background: var(--paper-deep) url(img/poster/hero-chairs.jpg) center / cover no-repeat;
+  }
+  #hydrofoil .bleed--over{
+    background: var(--paper-deep) url(img/poster/hydrofoil.jpg) center / cover no-repeat;
+  }
+
+  /* ---------- the wide layout, restated ----------
+     Chromium answers a width query in print against the sheet measured in
+     POINTS -- 842 for A4 landscape -- while it lays the page out in CSS
+     pixels, where that same sheet is 1123 wide. Every two-column rule on this
+     site sits at 860 or 900, so on paper all of them silently fail and the
+     portfolio prints as the phone layout: one column, a portrait as wide as
+     the sheet, a curriculum spilling onto a second page. They are restated
+     here without a query, because on a sheet this wide there is no other
+     layout the page could be asking for.
+
+     The same arithmetic makes the narrow rules at 859 match when they must
+     not, so the two they set are put back as well. */
+  .entry__grid{ grid-template-columns: 1fr auto; align-items: center; gap: var(--s7); }
+  .entry__art{ order: 0; justify-content: flex-end; }
+  .entry__cut{ height: clamp(4.5rem, 10vw, 10rem); }
+  .entry__cut--wide{ height: clamp(3.5rem, 7.5vw, 7.5rem); }
+
+  .split{ grid-template-columns: 1.15fr .85fr; align-items: center; gap: var(--s7); }
+  .split--wide{ grid-template-columns: .78fr 1fr; }
+  .split--wide .lede{ max-width: 62ch; }
+
+  .cv{ grid-template-columns: 1.3fr 1fr; gap: var(--s8); }
+  .role--now::before{ left: calc(var(--s4) * -1); }
+
+  .phead__meta{ grid-template-columns: 1.25fr 1fr; align-items: start; gap: var(--s7); }
+
+  .close__head{
+    grid-template-columns: 1.25fr 1fr;
+    grid-template-areas: "eyebrow eyebrow" "title sheet";
+    column-gap: var(--s7); row-gap: 0;
+    align-items: start;
+  }
+  .close__eyebrow{ grid-area: eyebrow; }
+  .close__col{ grid-area: title; padding-top: var(--s5); }
+  .spec--close{ grid-area: sheet; }
+  .spec--close > div:first-child{ border-top: 0; padding-top: var(--s5); }
+
+  /* ---------- pagination ----------
+     One subject per sheet. The opening frame, the statement and the closing
+     band each take a whole page and are centred in it; every project starts on
+     its own. Below that, the rule is only that nothing indivisible may be cut:
+     a picture and its caption, a role and its dates, a row of plates. */
+  .hero{
+    min-height: 0;
+    height: 210mm;              /* the whole sheet */
+    break-after: page;
+  }
+  /* 200, not the 210 the sheet measures: a page filled to its own exact height
+     rounds the wrong way often enough to spill a blank sheet after it. */
+  .statement-page,
+  #trabajo,
+  .close{
+    min-height: 200mm;
+    display: grid;
+    align-content: center;
+  }
+  #perfil,
+  #trayectoria,
+  #trabajo,
+  body > article{ break-before: page; }
+
+  .split, .cv, .notes, .gal__row, .shot, .role,
+  .spec > div, .entry, .close__head, .spec__crest,
+  .kit, .tags, figure{ break-inside: avoid; }
+  h2, h3, .label.subhead{ break-after: avoid; }
+
+  /* ---------- the air at the paper edge ----------
+     With no page margin, every block that can begin a sheet has to carry its
+     own. In the front matter that is the band: each of those sections owns a
+     whole sheet, so one rule covers all of them. The project sheets set theirs
+     below, block by block, because there the page is composed rather than
+     poured. */
+  .band{ padding-block: 12mm; }
+
+  /* ==========================================================================
+     PROJECT SHEETS
+
+     A scroll has one column and no end, so the page below a project head can
+     be as long as the work needs. A sheet has two dimensions and a hard floor,
+     and pouring the same column into it is what produced the pages this
+     replaces: a page of nothing but text, then a page of nothing but one
+     photograph, then a page two thirds empty because the next row of plates
+     was a centimetre too tall to follow.
+
+     So on paper each project is composed instead, on the field a drawing sheet
+     has always used: plates on the left, the reading matter ruled down a
+     narrower column on the right. Twelve columns carry both. The wrappers that
+     exist to centre a scroll -- .wrap, .band, .phead__meta, .gal, .split --
+     step out of the way with display:contents, which leaves every real block
+     (a head, a plate row, a spec sheet, a group of notes) a direct child of
+     that field, placed by hand.
+
+     Hand-placed, because there is no rule that composes three projects with
+     six, four and three photographs of different shapes into equal pages. What
+     is shared is the field, the type and the captions; what each project does
+     on it is a decision, written out per article below.
+     ========================================================================== */
+  body > article{
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 10px;
+    /* No row gap: the plate that rides up over its own poster word does it
+       with a negative margin, and a gap would be a floor under that. Distance
+       between rows is set per block instead. */
+    row-gap: 0;
+    align-content: start;
+    padding-inline: var(--gutter);
+  }
+  body > article > .wrap,
+  body > article .phead__meta,
+  body > article .gal,
+  body > article .split{ display: contents; }
+
+  /* Everything spans the sheet until a rule below says otherwise, and sits at
+     the top of its row rather than being stretched down it. */
+  body > article :is(.project__head, .bleed, .lede, .spec,
+                     .notes, .gal__row, .frame, .split > div,
+                     .label.subhead){
+    grid-column: 1 / -1;
+    align-self: start;
+  }
+  /* The distance between one block and the next, now that no gap provides it.
+     Dropped again on whatever opens a sheet, where the page edge is the
+     distance and this would be counted twice. */
+  body > article :is(.spec, .notes, .gal__row, .label.subhead){ margin-top: 10mm; }
+
+  /* ---------- the opening sheet ----------
+     Poster word, then the plate, and the plate runs off three edges of the
+     paper. For that the sheet has to add up exactly, so both halves are made
+     to measure rather than left to what the page happens to have: the head is
+     given a height, the word inside it a size, and the plate takes the rest of
+     the sheet -- 210mm less the head -- so its foot lands on the paper edge
+     and not four points above it.
+
+     Fixing the word costs what the screen gains from measuring it: on a scroll
+     each name is solved from the width it has to fill, which is what makes a
+     four-letter name and a nine-letter one carry the same weight. Here the
+     nine-letter names still fill the measure at this size, LC01 reads as the
+     short word it is, and every project opens on the same line. */
+  body > article .project__head{
+    height: 235px; box-sizing: border-box;
+    padding-block: 12mm 0; margin-top: 0;
+  }
+  /* 170, which is where the longest of the three names -- MUNCHSPOT -- stops
+     just inside the measure. It matters beyond the look of that one word: a
+     poster head that runs past the gutter is overflow, and a printed page with
+     overflow is scaled down to fit it, so a word four per cent too wide was
+     quietly shrinking every sheet in the portfolio by two per cent and pulling
+     the bled plates off the paper edge they are cut to. */
+  body > article .t-poster{ font-size: 170px !important; }
+  body > article .bleed{
+    width: auto;                                  /* the grid area is not the sheet */
+    margin-inline: calc(var(--gutter) * -1);
+    height: calc(210mm - 235px);
+    aspect-ratio: auto;
+  }
+  /* The plate rides up over the word by a measured slack on screen. Here the
+     two are flush, because the sheet is an exact sum and that slack is written
+     into the page as an inline custom property no stylesheet can outrank. */
+  body > article .bleed--over{ margin-top: 0; }
+
+  /* A frame given a height keeps its ratio as well, and a ratio with a height
+     resolves the WIDTH -- so the plate quietly narrows and the row stops
+     reaching its own right edge, which is the one thing the gallery is built
+     to guarantee. Width stated, the height is free to be set below. */
+  body > article .shot__f{ width: 100%; }
+
+  /* The reading column. Its notes stack instead of running three across: at a
+     third of the sheet, three columns of body text would be four words wide. */
+  body > article .notes{ grid-template-columns: 1fr; gap: var(--s5); }
+  body > article .lede{ max-width: none; }
+  body > article .note__b{ max-width: none; }
+
+  /* The last plate on a sheet has nothing below it to hold it off the paper,
+     so the sheet carries its own floor. */
+  body > article{ padding-bottom: 10mm; }
+
+  /* ---------- 01 Hydrofoil ----------
+     Six plates and the longest set of notes in the portfolio, so the notes
+     take the right-hand column and the plates keep the left: the assembled
+     board over the two views of its parts on the first sheet, the three
+     remaining views across the full measure on the second. */
+  #hydrofoil > .wrap > .phead__meta > .lede{ grid-column: 8 / -1; grid-row: 3; }
+  #hydrofoil .spec{ grid-column: 8 / -1; grid-row: 4; }
+  #hydrofoil .notes:first-of-type{ grid-column: 8 / -1; grid-row: 5; }
+  #hydrofoil .gal__row:nth-of-type(1){ grid-column: 1 / 8; grid-row: 3 / span 2; }
+  #hydrofoil .gal__row:nth-of-type(2){ grid-column: 1 / 8; grid-row: 5; }
+  /* The second sheet drops the two columns. Three plates against a column of
+     notes leaves either the plates too small to read or the notes stranded
+     halfway up an empty column, so here the row itself steps aside -- the row
+     is a row in the markup, not a fact about the page -- and its three plates
+     are placed one by one: the two views and the notes across the top, the
+     surface across the full measure under them, where a detail that is mostly
+     texture can be read as a band. */
+  #hydrofoil .gal__row:nth-of-type(3){ display: contents; }
+  #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(1){ grid-column: 1 / 5; grid-row: 6; }
+  #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(2){ grid-column: 5 / 9; grid-row: 6; }
+  /* The two views and the notes share the top of the sheet in three narrow
+     columns, which is what leaves the plate below the whole width of the
+     paper -- edges included. */
+  #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(1){ grid-column: 1 / 4; }
+  #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(2){ grid-column: 4 / 7; }
+  #hydrofoil .notes:last-of-type{ grid-column: 7 / -1; grid-row: 6; }
+  #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(3){
+    grid-column: 1 / -1; grid-row: 7; margin-top: 10mm;
+  }
+  #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(3) .shot__f{ height: 330px; }
+  /* A band cut out of the middle of this render is the widest part of the
+     board and nothing else. Taken from the foot of the frame it lands on the
+     nose, which is the end that says what shape the thing is. */
+  #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(3) .shot__f img{
+    object-position: 50% 100%;
+  }
+
+  /* Heights set on the frames rather than left to the ratios: on this sheet
+     the column of plates and the column of text have to end together, and a
+     few per cent off a render that is mostly studio floor is what buys that. */
+  #hydrofoil .gal__row:nth-of-type(1) .shot__f{ height: 300px; }
+
+  /* ---------- 02 LC01 ----------
+     Four photographs of one chair, all of them wide: across the full measure
+     they are 500px each, and cutting that in half to make room for a column of
+     text would waste the only thing this project has to show. So here the
+     plates take the sheet and the reading matter sits under them -- the lede
+     and the spec sheet under the finishes, the two pairs of notes under the
+     last two views. */
+  /* The finishes at the top of the sheet, and under them everything this
+     project has to say about the piece itself: the line that names it, the
+     two notes that explain it, and the spec sheet down the right of both.
+     The earlier version put only the lede and the sheet there -- one line
+     against four ruled rows -- and a quarter of the page stayed blank beside
+     that line because there was nothing else on the sheet to put in it. What
+     was missing was on the next sheet, describing the same chair. */
+  #lc01 .label.subhead{ grid-row: 3; }
+  #lc01 .gal__row:nth-of-type(1){ grid-row: 4; }
+  #lc01 > .wrap > .phead__meta > .lede{ grid-column: 1 / 7; grid-row: 5; margin-top: 6mm; }
+  #lc01 .notes:first-of-type{
+    grid-column: 1 / 7; grid-row: 6;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  #lc01 .spec{ grid-column: 7 / -1; grid-row: 5 / span 2; }
+  #lc01 .gal__row:nth-of-type(2){ grid-row: 7; }
+  #lc01 .notes:last-of-type{
+    grid-column: 1 / -1; grid-row: 8;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  /* Taller than their own ratio. These are studio photographs of a chair with
+     a hand's width of floor above and below it; what the crop takes is that
+     floor, and what it buys is plates that reach down the sheet instead of
+     sitting as a band across the top of one. The pair on the second sheet is
+     given more of it, because that sheet carries two notes where the first
+     carries four. */
+  #lc01 .gal__row:nth-of-type(1) .shot__f{ height: 290px; }
+  #lc01 .gal__row:nth-of-type(2) .shot__f{ height: 420px; }
+
+  /* ---------- 03 Munchspot ----------
+     The one project with no cover plate: the photograph of the bench in the
+     street IS the cover, and it is a portrait of a piece that runs from the
+     sign at the top to the feet on the pavement -- crop it into a band and the
+     product is what gets cut. So it keeps its own shape and takes the whole
+     height the sheet has left under the poster word, which at five columns is
+     within a per cent of its own ratio; everything the project says about
+     itself comes over beside it, into the six columns it leaves. */
+  #munchspot .frame{
+    grid-column: 1 / 6; grid-row: 2 / span 3;
+    width: 100%; height: calc(210mm - 241px); max-height: none;
+    margin-top: 0;
+  }
+  #munchspot > .wrap > .phead__meta > .lede{ grid-column: 6 / -1; grid-row: 2; margin-top: 0; }
+  /* Closer to the lede than the page's standard step, so that the column of
+     reading matter stays shorter than the photograph beside it. What sets the
+     height of these rows has to be the picture, whose height is a number in
+     this file; text measured in one engine and set in another moves by a line,
+     and a line is all it takes to push the last of it onto a sheet of its
+     own. */
+  #munchspot .spec{ grid-column: 6 / -1; grid-row: 3; margin-top: 4mm; }
+  /* Three notes under a spec sheet and beside a photograph: stacked they would
+     run past the foot of the picture, so across the measure they are given
+     they read as three short columns instead. */
+  #munchspot .split > div{
+    grid-column: 6 / -1; grid-row: 4;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: var(--s4); align-items: start;
+  }
+  #munchspot .split > div > div{ margin-bottom: 0 !important; }
+  /* A note set in a column a third of this one's width is a different job for
+     the same type: one size down keeps the line count honest and the last of
+     it off the paper edge. */
+  #munchspot .split > div .note__b{ font-size: .875rem; }
+
+  /* The detail sheet, on the same field as the hydrofoil's second: the two
+     close-ups and what the piece is made of across the top, the top view
+     across the full measure below. The close-ups are square and nearly keep
+     their shape; only the view underneath is held to a height, and a top view
+     of five slats is a thing that can be read as a band. */
+  #munchspot .label.subhead{ grid-column: 1 / -1; grid-row: 5; margin-bottom: var(--s3); }
+  #munchspot .gal__row:nth-of-type(1){ display: contents; }
+  #munchspot .gal__row:nth-of-type(1) .shot:nth-child(1){ grid-column: 1 / 4; grid-row: 6; }
+  #munchspot .gal__row:nth-of-type(1) .shot:nth-child(2){ grid-column: 4 / 7; grid-row: 6; }
+  #munchspot .notes:last-of-type{ grid-column: 7 / -1; grid-row: 6; }
+  #munchspot .gal__row:nth-of-type(2){ grid-column: 1 / -1; grid-row: 7; }
+  /* The long plate at the foot of each of these two sheets runs the whole
+     width of the paper, gutters included: an image cut to a band is a band,
+     and a band that stops short of the edge on both sides reads as a picture
+     that did not fit rather than one that was cut on purpose. The caption
+     stays inside the gutter, where every other caption in the document is. */
+  #munchspot .gal__row:nth-of-type(2) .shot__f{ height: 250px; }
+  /* Taken from the top of the frame instead of its middle: the bench runs off
+     the bottom edge, cut, and the studio ground stays above it. A top view
+     centred in a band reads as a fragment; cut at one edge only, it reads as
+     a picture that continues past the page. */
+  #munchspot .gal__row:nth-of-type(2) .shot__f img{ object-position: 50% 0%; }
+
+  /* ---------- 04 Smartmoney ----------
+     The only project here whose work is a film, so its plates are frames: six
+     of them, vertical, which on a landscape sheet is the one shape the field
+     handles badly. They run as a short row against the reading column on the
+     first sheet and across the full measure on the second, where the frames
+     are held to a height and taken from the top -- the line of type is at the
+     top of every one of them, and what a crop can spare is the empty ground
+     under the chart. */
+  #motion .t-poster{ font-size: 152px !important; }   /* ten letters */
+
+  /* The film itself cannot be printed. Three of its frames are already the
+     opening plate of this project, which is the closest a sheet gets. */
+  #motion .frame--film{ display: none; }
+
+  #motion > .wrap > .phead__meta > .lede{ grid-column: 8 / -1; grid-row: 3; }
+  #motion .spec{ grid-column: 8 / -1; grid-row: 4; }
+  #motion .gal__row:nth-of-type(1){ grid-column: 1 / 9; grid-row: 3 / span 2; }
+  #motion > .wrap > .phead__meta > .lede,
+  #motion .spec{ grid-column: 9 / -1; }
+  #motion .split > div{
+    grid-column: 1 / -1; grid-row: 5;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: var(--s4); align-items: start; margin-top: 10mm;
+  }
+  #motion .split > div > div{ margin-bottom: 0 !important; }
+
+  #motion .gal__row:nth-of-type(2){ grid-column: 1 / -1; grid-row: 6; }
+  #motion .gal__row:nth-of-type(1) .shot__f{ height: 400px; }
+  #motion .gal__row:nth-of-type(2) .shot__f{ height: 440px; }
+  #motion .gal__row:nth-of-type(2) .shot__f img{ object-position: 50% 0%; }
+  #motion .notes:last-of-type{
+    grid-column: 1 / -1; grid-row: 7;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(3),
+  #munchspot .gal__row:nth-of-type(2) .shot{
+    margin-inline: calc(var(--gutter) * -1);
+  }
+  #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(3) .shot__cap,
+  #munchspot .gal__row:nth-of-type(2) .shot .shot__cap{
+    padding-inline: var(--gutter);
+  }
+
+  /* ---------- plates that fill what they sit beside ----------
+     A plate that shares a row with a column of text should end where the text
+     ends. Two things were stopping it, and only the second one is obvious.
+
+     The first: the box already filled the row -- a grid item stretches by
+     default -- but the picture inside it did not, so the plate ended at the
+     height its own ratio gave it and the rest of the box was paper. What was
+     missing is this: the figure becomes a flex column and the frame takes the
+     free space, so the picture grows into the box the row already gave it.
+
+     The second: a height in this file is a guess at how many lines a
+     paragraph will take, and the answer changes with the language, the
+     hyphenation and the engine. So the heights below are a floor, not a
+     measurement -- the frame grows past them to whatever the text turned out
+     to need. Nothing else has to be recalculated when the text changes.
+
+     Only on the renders. On a frame of the film the type sits near the left
+     edge and a taller frame at the same width takes its crop out of the
+     sides, so those keep their ratio and are set by hand. */
+  #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(-n+2),
+  #munchspot .gal__row:nth-of-type(1) .shot{ display: flex; flex-direction: column; }
+  /* This row is a flex row inside its cell rather than a set of cells, so
+     it cannot be stretched without the row's height and the frame's height
+     each waiting on the other. Measured against the paragraph beside it. */
+  #hydrofoil .gal__row:nth-of-type(2) .shot__f{ height: 291px; }
+  #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(-n+2) .shot__f{ height: 217px; flex: 1 1 auto; }
+  #munchspot .gal__row:nth-of-type(1) .shot__f{ height: 230px; flex: 1 1 auto; }
+  /* And the notes start on the same line as the plates beside them: the step
+     that separates one block from the next is not wanted between two columns
+     that begin together. */
+  #munchspot .notes:last-of-type{ margin-top: 0; }
+
+  /* ---------- where the sheets end ----------
+     A forced break before a grid item breaks before the row it sits in, so one
+     item per sheet carries it. The blocks that land at the top of the new
+     sheet carry the air instead of the break, which is why the two are listed
+     apart. */
+  #hydrofoil > .wrap > .phead__meta > .lede{ break-before: page; }
+  #motion > .wrap > .phead__meta > .lede{ break-before: page; }
+  #lc01 .label.subhead{ break-before: page; }
+  /* Not forced: the sheet above it now ends close enough to the paper that a
+     forced break there produces an empty sheet, and the plates that follow
+     cannot fit in what is left anyway. */
+  /* Munchspot's opening sheet ends four pixels short of the paper, and a
+     forced break that close to one produces an empty sheet after it: the
+     engine has already ended the page by the time it is told to. The detail
+     sheet does not need to be told -- nothing that follows can fit in what is
+     left -- so it breaks on its own. */
+
+  #hydrofoil :is(.phead__meta > .lede, .gal__row:nth-of-type(1)),
+  #hydrofoil :is(.gal__row:nth-of-type(3) .shot:nth-child(1),
+                 .gal__row:nth-of-type(3) .shot:nth-child(2),
+                 .notes:last-of-type),
+  #lc01 :is(.label.subhead),
+  #lc01 :is(.gal__row:nth-of-type(2)),
+  #munchspot :is(.label.subhead),
+  #motion :is(.phead__meta > .lede, .gal__row:nth-of-type(1)),
+  #motion :is(.gal__row:nth-of-type(2)){
+    margin-top: 0;
+    padding-top: 10mm;
+  }
+
+  /* Every frame on the page is 16% overheight, so that the picture inside has
+     somewhere to drift. On paper nothing drifts, and that slack is just 8% off
+     the top and 8% off the bottom of every photograph in the portfolio. */
+  .bleed img[data-para],
+  .frame img[data-para],
+  .shot__f img{ position: static; height: 100%; top: auto; }
+
+  /* The cover signature. Display face at a size that reads as a byline under
+     the title rather than as a second heading beside it. */
+  .hero__name{
+    display: block;
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.3rem;
+    letter-spacing: -.01em;
+    color: var(--ink);
+  }
+
+  /* A paragraph set to a third of a landscape sheet is a caption. This one is
+     the only thing on its page and it is what the portfolio is arguing, so it
+     is set to the size that claim deserves and given a measure that still
+     breaks where the sense does. */
+  .statement-page .statement{ font-size: 3.35rem; max-width: 23ch; }
+
+  /* ---------- index ----------
+     Four entries where there were three. On a scroll that costs nothing; on a
+     sheet it is the difference between one page and two, so the rows close up
+     and the names come down a step. They are still the second largest type in
+     the document, which is what an index is for. */
+  .entry{ padding-block: var(--s3); }
+  #trabajo .entry__name{ font-size: 4.5rem; }
+  #trabajo .entry__desc{ margin-top: var(--s2); }
+
+  /* ---------- the curriculum, held to one sheet ----------
+     Experience, tools, education and languages are read together or they are
+     read as two half-pages of a list. Everything that separates them is a step
+     on the page's own spacing scale, so the whole block is tightened by moving
+     the scale itself rather than by unpicking a dozen rules -- including the
+     ones set inline in the markup, which nothing else here could reach. */
+  #trayectoria{
+    --s3: .7rem; --s4: .85rem; --s5: 1rem; --s6: 1.25rem; --s7: 1.75rem; --s8: 4rem;
+  }
+  /* The sheet opens on this section, so the band's own top padding is a second
+     margin stacked on the page's. */
+  #trayectoria .band{ padding-block: 10mm; }
+  #trayectoria .kit__i{ grid-template-rows: 22px auto; }
+  #trayectoria .role__b{ max-width: none; }   /* the column is the measure */
+
+  /* A portrait set to the height of a scroll is taller than the sheet it now
+     has to sit on, and an image that does not fit its page leaves its own
+     empty frame behind on the one before. */
+  .frame{ max-height: 150mm; }
+
+  /* ---------- the curriculum sheet ----------
+     Arranged the way it was in the portfolio this page grew out of: the
+     photograph wide and to the left, the text starting at its top edge, and
+     the name closing the block under a rule.
+
+     The picture is the part worth explaining. It was taken landscape -- 1431
+     by 1222 -- and the site sets it in a 4:5 frame, which is a deliberate
+     crop for a column that scrolls. On a sheet there is no column: held to
+     that ratio it lost a third of its own width and still left a hand's width
+     of paper under it. Given its own ratio back it is the whole photograph,
+     and it fills the sheet. */
+  #perfil .split--wide{ grid-template-columns: 1.55fr 1fr; }
+  #perfil .split{ align-items: start; }
+  #perfil .frame{
+    aspect-ratio: 1431 / 1222 !important;   /* beats the ratio set inline */
+    max-height: none;
+  }
+  #perfil .cv__sign{
+    display: block;
+    margin: var(--s6) 0 0;
+    padding-top: var(--s4);
+    border-top: 1px solid var(--rule);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 2rem;
+    letter-spacing: -.03em;
+    line-height: 1;
+    text-align: right;
+  }
+
+  /* ---------- links ---------- */
+  /* On paper an underlined mailto reads as a smudge; the address is already
+     written out in full beside its label. */
+  a{ text-decoration: none; }
+}
