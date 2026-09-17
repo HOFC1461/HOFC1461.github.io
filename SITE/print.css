@@ -288,6 +288,12 @@
     grid-column: 1 / 9; grid-row: 7; margin-top: 10mm;
   }
   #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(3) .shot__f{ height: 340px; }
+  /* A band cut out of the middle of this render is the widest part of the
+     board and nothing else. Taken from the foot of the frame it lands on the
+     nose, which is the end that says what shape the thing is. */
+  #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(3) .shot__f img{
+    object-position: 50% 100%;
+  }
   /* And the two above it go back to their own ratio. They were being held to
      the depth of the notes beside them, which on a frame already wider than it
      is tall does not add picture -- it trims the sides off to make the height.
@@ -387,6 +393,11 @@
      the top view at the same depth of sheet, where across the full measure it
      was showing two fifths of it. */
   #munchspot .gal__row:nth-of-type(2) .shot__f{ height: 257px; }
+  /* Taken from the top of the frame instead of its middle: the bench runs off
+     the bottom edge, cut, and the studio ground stays above it. A top view
+     centred in a band reads as a fragment; cut at one edge only, it reads as
+     a picture that continues past the page. */
+  #munchspot .gal__row:nth-of-type(2) .shot__f img{ object-position: 50% 0%; }
 
   /* ---------- where the sheets end ----------
      A forced break before a grid item breaks before the row it sits in, so one
@@ -463,18 +474,35 @@
      empty frame behind on the one before. */
   .frame{ max-height: 150mm; }
 
-  /* The curriculum sheet, on the other hand, was leaving a hand's width of
-     paper under a portrait held to a third of the measure. Given the columns
-     back, the picture reaches down the sheet at its own ratio -- nothing
-     cropped -- and the sheet closes instead of trailing off. */
-  #perfil .split--wide{ grid-template-columns: 1.05fr 1fr; }
-  #perfil .frame{ max-height: none; }
-  /* And the two columns start on the same line. Centred against a portrait
-     that now runs most of the sheet, the text floated in the middle of its
-     own column with air above and below it and no edge shared with anything;
-     aligned to the top, the label sits on the top edge of the photograph and
-     the air collects at the foot, where a margin belongs. */
+  /* ---------- the curriculum sheet ----------
+     Arranged the way it was in the portfolio this page grew out of: the
+     photograph wide and to the left, the text starting at its top edge, and
+     the name closing the block under a rule.
+
+     The picture is the part worth explaining. It was taken landscape -- 1431
+     by 1222 -- and the site sets it in a 4:5 frame, which is a deliberate
+     crop for a column that scrolls. On a sheet there is no column: held to
+     that ratio it lost a third of its own width and still left a hand's width
+     of paper under it. Given its own ratio back it is the whole photograph,
+     and it fills the sheet. */
+  #perfil .split--wide{ grid-template-columns: 1.55fr 1fr; }
   #perfil .split{ align-items: start; }
+  #perfil .frame{
+    aspect-ratio: 1431 / 1222 !important;   /* beats the ratio set inline */
+    max-height: none;
+  }
+  #perfil .cv__sign{
+    display: block;
+    margin: var(--s6) 0 0;
+    padding-top: var(--s4);
+    border-top: 1px solid var(--rule);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 2rem;
+    letter-spacing: -.03em;
+    line-height: 1;
+    text-align: right;
+  }
 
   /* ---------- links ---------- */
   /* On paper an underlined mailto reads as a smudge; the address is already
