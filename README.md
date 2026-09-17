@@ -105,14 +105,28 @@ desplazó.
   con `display:contents`. Las tres composiciones están escritas a mano, una por
   proyecto: no hay regla que acomode seis, cuatro y tres fotografías de formas
   distintas en páginas iguales.
-- **Dos cosas que Chromium hace distinto al imprimir.** Contesta las *media
-  queries* de ancho contra la hoja medida en **puntos** —842 en A4 horizontal—
-  mientras arma la página en píxeles CSS, donde esa misma hoja mide 1123: por
-  eso las reglas de dos columnas del sitio, todas por encima de 860, se repiten
-  en `print.css` sin consulta. Y un marco con proporción declarada al que se le
-  fija la altura resuelve su **ancho** desde la proporción: si no se le dice
-  `width`, la lámina se angosta sola y la fila deja de llegar a su propio
-  borde.
+- **Las portadas de proyecto son una suma exacta.** La lámina sale por tres
+  cantos del papel, y para eso la hoja tiene que cerrar al pixel: el cabezal
+  lleva altura fija, la palabra de cartel tamaño fijo dentro de él, y la lámina
+  toma `210mm` menos el cabezal. Por eso aquí la palabra no se mide contra el
+  ancho como en pantalla: a 170px la más larga —MUNCHSPOT— cae justo dentro de
+  la caja, y una palabra que se sale la paga toda la edición (ver abajo).
+- **Tres cosas que Chromium hace distinto al imprimir.** (1) Contesta las
+  *media queries* de ancho contra la hoja medida en **puntos** —842 en A4
+  horizontal— mientras arma la página en píxeles CSS, donde esa misma hoja mide
+  1123: por eso las reglas de dos columnas del sitio, todas por encima de 860,
+  se repiten en `print.css` sin consulta. (2) Si algo se sale del ancho de la
+  hoja, **encoge el documento entero** para que quepa: una palabra de cartel 4%
+  demasiado ancha estaba achicando cada hoja un 2% y despegando las láminas del
+  canto al que están cortadas. (3) Un marco con proporción declarada al que se
+  le fija la altura resuelve su **ancho** desde la proporción: si no se le dice
+  `width`, la lámina se angosta sola y la fila deja de llegar a su propio borde.
+- **Deja aire al pie de cada hoja.** El texto se mide en un motor y se compone
+  en otro, y se mueve un renglón; una hoja calculada al ras se parte en dos. Lo
+  que fija la altura de una fila conviene que sea una imagen —un número en este
+  archivo— y no una columna de texto. Y un `break-before: page` forzado justo
+  después de contenido que ya llega al canto produce una hoja en blanco: donde
+  pase, se quita el forzado y se deja que la página rompa sola.
 - **Idioma.** El interruptor cambia el `lang` del documento. Texto nuevo necesita
   su entrada en el diccionario de `index.html`; abrir la página en
   `#i18n-audit` lista lo que no está cubierto.
