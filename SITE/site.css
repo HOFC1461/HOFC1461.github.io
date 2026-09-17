@@ -592,6 +592,27 @@ body > .hero{ scroll-margin-top: 0; }
 
 .frame{ position: relative; overflow: hidden; background: var(--paper-deep); }
 .frame img{ width: 100%; height: 100%; object-fit: cover; }
+/* The opening plate of the motion project: three panels of the film itself,
+   side by side on its own black. Each clip keeps its 9:16 and is contained
+   rather than cropped -- the type in these frames runs to the edges, and a
+   panel cut to fill would take the crop out of the words. The black either
+   side of each one is the same black the film is on, so what reads is three
+   screens, not three letterboxes.
+
+   The still underneath carries the same composition for print and for any
+   browser that does not get the clips; only one of the two is ever shown. */
+.filmstrip{
+  display: flex;
+  width: 100%; height: 100%;
+  background: #000;
+}
+.filmstrip video{
+  flex: 1 1 0; min-width: 0;
+  width: 100%; height: 100%;
+  object-fit: contain;
+}
+.filmstrip + .filmstrip__still{ display: none; }
+
 /* The one frame that holds a film with sound rather than a photograph: it gets
    the browser's own controls, because a thirty-five second piece with a voice
    over it is watched, not glanced at. */

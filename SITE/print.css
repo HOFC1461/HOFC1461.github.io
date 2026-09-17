@@ -74,6 +74,9 @@
      was filling, so the composition is unchanged. */
   .hero__video,
   .bleed video{ display: none !important; }
+  /* Paper takes the composed still instead of the three clips. */
+  .filmstrip{ display: none !important; }
+  .filmstrip + .filmstrip__still{ display: block; }
   .hero{
     background: var(--paper-deep) url(img/poster/hero-chairs.jpg) center / cover no-repeat;
   }

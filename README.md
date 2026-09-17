@@ -14,7 +14,7 @@ SITE/                 lo único que se publica
   site.css            la única hoja de estilos
   print.css           la misma página, compuesta en hojas A4 horizontales
   img/                imágenes optimizadas para web
-  video/              portada, hydrofoil y el corto de Smartmoney
+  video/              portada, hydrofoil, el corto y sus tres fragmentos
 tools/pdf.mjs         imprime el sitio a PDF con Chromium
 .github/workflows/    el despliegue a GitHub Pages
 MOTION.md             análisis del video de referencia y qué se tomó de él

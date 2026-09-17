@@ -337,7 +337,21 @@
        landscape plate would be a sliver of it; three of them are the argument
        the film makes: the question, the mechanism, the conclusion. -->
   <div class="bleed bleed--over reveal">
-    <img data-para="6"
+    <!-- On screen the three panels are the film running, not stills of it: a
+         project about motion opens with a plate that moves. Each clip is five
+         seconds of the moment its still was taken from, muted and looping, and
+         the observer further down pauses all three the moment the plate leaves
+         the viewport. The <img> underneath is what prints, and what shows if
+         the clips never arrive -- it is the same three frames, composed. -->
+    <div class="filmstrip" aria-hidden="true">
+      <video autoplay loop muted playsinline poster="img/motion/01-portada-768.jpg">
+        <source src="video/motion-a-planteamiento.mp4" type="video/mp4"></video>
+      <video autoplay loop muted playsinline poster="img/motion/04-minimo-768.jpg">
+        <source src="video/motion-b-liquidez.mp4" type="video/mp4"></video>
+      <video autoplay loop muted playsinline poster="img/motion/07-patrones-768.jpg">
+        <source src="video/motion-c-hipotesis.mp4" type="video/mp4"></video>
+    </div>
+    <img class="filmstrip__still" data-para="6"
       src="img/hero/cover-motion.jpg"
       srcset="img/hero/cover-motion-768.jpg 768w, img/hero/cover-motion-1200.jpg 1200w, img/hero/cover-motion.jpg 2247w"
       sizes="100vw"
