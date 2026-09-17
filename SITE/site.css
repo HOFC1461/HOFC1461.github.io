@@ -849,6 +849,28 @@ body > .hero{ scroll-margin-top: 0; }
   .kit__i:hover .kit__n{ color: var(--ink-soft); }
 }
 
+/* The note that is its own exhibit. Same construction as the current role
+   below -- a cobalt rule down its left edge -- because it says the same kind
+   of thing: this one is live, and you are standing in it. The heading takes
+   the accent too, which is what makes the block findable on a sheet somebody
+   is scanning rather than reading. */
+.note--this{
+  padding-left: var(--s4);
+  border-left: 2px solid var(--accent);
+}
+.note--this .note__h{ color: var(--accent); }
+.note__go{
+  display: inline-flex; align-items: center; gap: var(--s2);
+  margin-top: var(--s3);
+  font-family: var(--font-mono); font-size: .6875rem;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--accent); text-decoration: none;
+}
+.note__go svg{ transition: transform var(--d-hover) var(--ease-out); }
+@media (hover: hover) and (pointer: fine){
+  .note__go:hover svg{ transform: translateX(4px); }
+}
+
 /* Cobalt marks the current role and nothing else in this column. An accent
    that lands on every row stops being an accent. */
 .role--now{ position: relative; }
