@@ -467,6 +467,16 @@ body > .hero{ scroll-margin-top: 0; }
 /* The hydrofoil cut is landscape, so it needs less height for equal presence. */
 .entry__cut--wide{ height: clamp(3.5rem, 7.5vw, 7.5rem); }
 
+/* One entry's mark is a still rather than a cut-out -- see the comment on the
+   element. Held to the same height as the cuts so the four marks line up, and
+   given the page's own frame rather than a border of its own. */
+.entry__still{
+  display: block; width: auto;
+  height: clamp(4.5rem, 10vw, 10rem);
+  object-fit: cover;
+  background: var(--paper-deep);
+}
+
 /* Stacked, the mark reads better introducing the row than trailing it. */
 @media (max-width: 859px){
   .entry__art{ order: -1; justify-content: flex-start; }
@@ -582,6 +592,17 @@ body > .hero{ scroll-margin-top: 0; }
 
 .frame{ position: relative; overflow: hidden; background: var(--paper-deep); }
 .frame img{ width: 100%; height: 100%; object-fit: cover; }
+/* The one frame that holds a film with sound rather than a photograph: it gets
+   the browser's own controls, because a thirty-five second piece with a voice
+   over it is watched, not glanced at. */
+.frame--film{ background: #000; }
+.frame--film video{ width: 100%; height: 100%; object-fit: contain; }
+/* A vertical film given half the measure is a 1100px tall black column. Held
+   to the proportion it was shot for -- a phone -- it sits beside what is
+   written about it instead of pushing it off the screen. */
+@media (min-width: 900px){
+  #smartmoney .split{ grid-template-columns: .62fr 1.38fr; align-items: start; }
+}
 
 /* Any image that carries a drift needs slack to drift into, or it exposes the
    frame edge at the extremes. Same 16% overheight as the gallery frames. */

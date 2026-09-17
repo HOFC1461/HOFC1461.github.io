@@ -399,12 +399,47 @@
      a picture that continues past the page. */
   #munchspot .gal__row:nth-of-type(2) .shot__f img{ object-position: 50% 0%; }
 
+  /* ---------- 04 Smartmoney ----------
+     The only project here whose work is a film, so its plates are frames: six
+     of them, vertical, which on a landscape sheet is the one shape the field
+     handles badly. They run as a short row against the reading column on the
+     first sheet and across the full measure on the second, where the frames
+     are held to a height and taken from the top -- the line of type is at the
+     top of every one of them, and what a crop can spare is the empty ground
+     under the chart. */
+  #smartmoney .t-poster{ font-size: 152px !important; }   /* ten letters */
+
+  /* The film itself cannot be printed. Three of its frames are already the
+     opening plate of this project, which is the closest a sheet gets. */
+  #smartmoney .frame--film{ display: none; }
+
+  #smartmoney > .wrap > .phead__meta > .lede{ grid-column: 8 / -1; grid-row: 3; }
+  #smartmoney .spec{ grid-column: 8 / -1; grid-row: 4; }
+  #smartmoney .gal__row:nth-of-type(1){ grid-column: 1 / 9; grid-row: 3 / span 2; }
+  #smartmoney > .wrap > .phead__meta > .lede,
+  #smartmoney .spec{ grid-column: 9 / -1; }
+  #smartmoney .split > div{
+    grid-column: 1 / -1; grid-row: 5;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: var(--s4); align-items: start; margin-top: 10mm;
+  }
+  #smartmoney .split > div > div{ margin-bottom: 0 !important; }
+
+  #smartmoney .gal__row:nth-of-type(2){ grid-column: 1 / -1; grid-row: 6; }
+  #smartmoney .gal__row:nth-of-type(2) .shot__f{ height: 440px; }
+  #smartmoney .gal__row:nth-of-type(2) .shot__f img{ object-position: 50% 0%; }
+  #smartmoney .notes:last-of-type{
+    grid-column: 1 / -1; grid-row: 7;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
   /* ---------- where the sheets end ----------
      A forced break before a grid item breaks before the row it sits in, so one
      item per sheet carries it. The blocks that land at the top of the new
      sheet carry the air instead of the break, which is why the two are listed
      apart. */
   #hydrofoil > .wrap > .phead__meta > .lede{ break-before: page; }
+  #smartmoney > .wrap > .phead__meta > .lede{ break-before: page; }
   #lc01 .label.subhead{ break-before: page; }
   /* Not forced: the sheet above it now ends close enough to the paper that a
      forced break there produces an empty sheet, and the plates that follow
@@ -421,7 +456,9 @@
                  .notes:last-of-type),
   #lc01 :is(.label.subhead),
   #lc01 :is(.gal__row:nth-of-type(2)),
-  #munchspot :is(.label.subhead){
+  #munchspot :is(.label.subhead),
+  #smartmoney :is(.phead__meta > .lede, .gal__row:nth-of-type(1)),
+  #smartmoney :is(.gal__row:nth-of-type(2)){
     margin-top: 0;
     padding-top: 10mm;
   }
@@ -451,8 +488,14 @@
      breaks where the sense does. */
   .statement-page .statement{ font-size: 3.35rem; max-width: 23ch; }
 
-  /* ---------- index ---------- */
-  .entry{ padding-block: var(--s5); }
+  /* ---------- index ----------
+     Four entries where there were three. On a scroll that costs nothing; on a
+     sheet it is the difference between one page and two, so the rows close up
+     and the names come down a step. They are still the second largest type in
+     the document, which is what an index is for. */
+  .entry{ padding-block: var(--s3); }
+  #trabajo .entry__name{ font-size: 4.5rem; }
+  #trabajo .entry__desc{ margin-top: var(--s2); }
 
   /* ---------- the curriculum, held to one sheet ----------
      Experience, tools, education and languages are read together or they are
