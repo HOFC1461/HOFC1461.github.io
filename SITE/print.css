@@ -334,7 +334,7 @@
      given more of it, because that sheet carries two notes where the first
      carries four. */
   #lc01 .gal__row:nth-of-type(1) .shot__f{ height: 290px; }
-  #lc01 .gal__row:nth-of-type(2) .shot__f{ height: 390px; }
+  #lc01 .gal__row:nth-of-type(2) .shot__f{ height: 420px; }
 
   /* ---------- 03 Munchspot ----------
      The one project with no cover plate: the photograph of the bench in the
@@ -462,6 +462,19 @@
      has to sit on, and an image that does not fit its page leaves its own
      empty frame behind on the one before. */
   .frame{ max-height: 150mm; }
+
+  /* The curriculum sheet, on the other hand, was leaving a hand's width of
+     paper under a portrait held to a third of the measure. Given the columns
+     back, the picture reaches down the sheet at its own ratio -- nothing
+     cropped -- and the sheet closes instead of trailing off. */
+  #perfil .split--wide{ grid-template-columns: 1.05fr 1fr; }
+  #perfil .frame{ max-height: none; }
+  /* And the two columns start on the same line. Centred against a portrait
+     that now runs most of the sheet, the text floated in the middle of its
+     own column with air above and below it and no edge shared with anything;
+     aligned to the top, the label sits on the top edge of the photograph and
+     the air collects at the foot, where a margin belongs. */
+  #perfil .split{ align-items: start; }
 
   /* ---------- links ---------- */
   /* On paper an underlined mailto reads as a smudge; the address is already
