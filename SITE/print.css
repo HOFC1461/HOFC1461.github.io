@@ -382,7 +382,6 @@
   #munchspot .gal__row:nth-of-type(1) .shot:nth-child(2){ grid-column: 4 / 7; grid-row: 6; }
   #munchspot .notes:last-of-type{ grid-column: 7 / -1; grid-row: 6; }
   #munchspot .gal__row:nth-of-type(2){ grid-column: 1 / -1; grid-row: 7; }
-  #munchspot .gal__row:nth-of-type(1) .shot__f{ height: 230px; }
   /* The long plate at the foot of each of these two sheets runs the whole
      width of the paper, gutters included: an image cut to a band is a band,
      and a band that stops short of the edge on both sides reads as a picture
@@ -440,18 +439,36 @@
   }
 
   /* ---------- plates that fill what they sit beside ----------
-     A row of plates against a column of text ends where its own ratio says
-     and the text goes on past it, so the sheet reads as a band of pictures
-     with a paragraph hanging below them. Where the two share a row the plates
-     are cut to the depth the text sets instead -- measured, not stretched: a
-     frame told to grow into its row ends up setting the row's height itself,
-     and the row then follows the picture rather than the paragraph.
+     A plate that shares a row with a column of text should end where the text
+     ends. Two things were stopping it, and only the second one is obvious.
+
+     The first: the box already filled the row -- a grid item stretches by
+     default -- but the picture inside it did not, so the plate ended at the
+     height its own ratio gave it and the rest of the box was paper. What was
+     missing is this: the figure becomes a flex column and the frame takes the
+     free space, so the picture grows into the box the row already gave it.
+
+     The second: a height in this file is a guess at how many lines a
+     paragraph will take, and the answer changes with the language, the
+     hyphenation and the engine. So the heights below are a floor, not a
+     measurement -- the frame grows past them to whatever the text turned out
+     to need. Nothing else has to be recalculated when the text changes.
 
      Only on the renders. On a frame of the film the type sits near the left
-     edge, and a taller frame at the same width takes its crop out of the
-     sides; those keep their ratio. */
-  #hydrofoil .gal__row:nth-of-type(2) .shot__f{ height: 268px; }
-  #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(-n+2) .shot__f{ height: 217px; }
+     edge and a taller frame at the same width takes its crop out of the
+     sides, so those keep their ratio and are set by hand. */
+  #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(-n+2),
+  #munchspot .gal__row:nth-of-type(1) .shot{ display: flex; flex-direction: column; }
+  /* This row is a flex row inside its cell rather than a set of cells, so
+     it cannot be stretched without the row's height and the frame's height
+     each waiting on the other. Measured against the paragraph beside it. */
+  #hydrofoil .gal__row:nth-of-type(2) .shot__f{ height: 291px; }
+  #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(-n+2) .shot__f{ height: 217px; flex: 1 1 auto; }
+  #munchspot .gal__row:nth-of-type(1) .shot__f{ height: 230px; flex: 1 1 auto; }
+  /* And the notes start on the same line as the plates beside them: the step
+     that separates one block from the next is not wanted between two columns
+     that begin together. */
+  #munchspot .notes:last-of-type{ margin-top: 0; }
 
   /* ---------- where the sheets end ----------
      A forced break before a grid item breaks before the row it sits in, so one
