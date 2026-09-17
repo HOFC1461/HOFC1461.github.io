@@ -278,15 +278,21 @@
   #hydrofoil .gal__row:nth-of-type(3){ display: contents; }
   #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(1){ grid-column: 1 / 5; grid-row: 6; }
   #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(2){ grid-column: 5 / 9; grid-row: 6; }
-  #hydrofoil .notes:last-of-type{ grid-column: 9 / -1; grid-row: 6; }
+  /* The notes run down both rows rather than sitting in the first: it keeps
+     the top right corner from going blank, and it frees the plate below from
+     having to span the sheet. Which is what buys the picture back -- across
+     the full measure that frame was showing a third of its own height; over
+     eight columns it shows more than half at the same depth of sheet. */
+  #hydrofoil .notes:last-of-type{ grid-column: 9 / -1; grid-row: 6 / span 2; }
   #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(3){
-    grid-column: 1 / -1; grid-row: 7; margin-top: 10mm;
+    grid-column: 1 / 9; grid-row: 7; margin-top: 10mm;
   }
-  #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(3) .shot__f{ height: 250px; }
-  /* The two above it are held to the depth of the notes they sit beside, so
-     the top of the sheet is one band and not a pair of plates with a strip of
-     paper hanging under them. */
-  #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(-n+2) .shot__f{ height: 295px; }
+  #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(3) .shot__f{ height: 340px; }
+  /* And the two above it go back to their own ratio. They were being held to
+     the depth of the notes beside them, which on a frame already wider than it
+     is tall does not add picture -- it trims the sides off to make the height.
+     Nothing cropped at all is more of the photograph than any crop. */
+  #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(-n+2) .shot__f{ height: auto; }
 
   /* Heights set on the frames rather than left to the ratios: on this sheet
      the column of plates and the column of text have to end together, and a
@@ -301,24 +307,34 @@
      plates take the sheet and the reading matter sits under them -- the lede
      and the spec sheet under the finishes, the two pairs of notes under the
      last two views. */
-  /* Sheet order: the label, then what there is to read, then the plates along
-     the foot. Read under the plates instead, the spec sheet -- four rows deep
-     against a single line of lede -- left a quarter of the sheet blank below
-     that line and nothing to put in it. Above them the same two blocks frame
-     an air pocket that the title, the sheet and the plates all close on, which
-     is a composition rather than what was left over. */
+  /* The finishes at the top of the sheet, and under them everything this
+     project has to say about the piece itself: the line that names it, the
+     two notes that explain it, and the spec sheet down the right of both.
+     The earlier version put only the lede and the sheet there -- one line
+     against four ruled rows -- and a quarter of the page stayed blank beside
+     that line because there was nothing else on the sheet to put in it. What
+     was missing was on the next sheet, describing the same chair. */
   #lc01 .label.subhead{ grid-row: 3; }
-  #lc01 > .wrap > .phead__meta > .lede{ grid-column: 1 / 7; grid-row: 4; }
-  #lc01 .spec{ grid-column: 7 / -1; grid-row: 4; }
-  #lc01 .gal__row:nth-of-type(1){ grid-row: 5; }
-  #lc01 .gal__row:nth-of-type(2){ grid-row: 6; }
-  #lc01 .notes:first-of-type{ grid-column: 1 / 7; grid-row: 7; grid-template-columns: 1fr; }
-  #lc01 .notes:last-of-type{ grid-column: 7 / -1; grid-row: 7; grid-template-columns: 1fr; }
-  /* Taller than their own ratio by a sixth. These are studio photographs of a
-     chair with a hand's width of floor above and below it; what the crop takes
-     is that floor, and what it buys is a pair of plates that reach down the
-     sheet instead of sitting as a band across the top of one. */
-  #lc01 .gal__row .shot__f{ height: 320px; }
+  #lc01 .gal__row:nth-of-type(1){ grid-row: 4; }
+  #lc01 > .wrap > .phead__meta > .lede{ grid-column: 1 / 7; grid-row: 5; margin-top: 6mm; }
+  #lc01 .notes:first-of-type{
+    grid-column: 1 / 7; grid-row: 6;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  #lc01 .spec{ grid-column: 7 / -1; grid-row: 5 / span 2; }
+  #lc01 .gal__row:nth-of-type(2){ grid-row: 7; }
+  #lc01 .notes:last-of-type{
+    grid-column: 1 / -1; grid-row: 8;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  /* Taller than their own ratio. These are studio photographs of a chair with
+     a hand's width of floor above and below it; what the crop takes is that
+     floor, and what it buys is plates that reach down the sheet instead of
+     sitting as a band across the top of one. The pair on the second sheet is
+     given more of it, because that sheet carries two notes where the first
+     carries four. */
+  #lc01 .gal__row:nth-of-type(1) .shot__f{ height: 290px; }
+  #lc01 .gal__row:nth-of-type(2) .shot__f{ height: 390px; }
 
   /* ---------- 03 Munchspot ----------
      The one project with no cover plate: the photograph of the bench in the
@@ -364,10 +380,13 @@
   #munchspot .gal__row:nth-of-type(1){ display: contents; }
   #munchspot .gal__row:nth-of-type(1) .shot:nth-child(1){ grid-column: 1 / 5; grid-row: 6; }
   #munchspot .gal__row:nth-of-type(1) .shot:nth-child(2){ grid-column: 5 / 9; grid-row: 6; }
-  #munchspot .notes:last-of-type{ grid-column: 9 / -1; grid-row: 6; }
-  #munchspot .gal__row:nth-of-type(2){ grid-column: 1 / -1; grid-row: 7; }
-  #munchspot .gal__row:nth-of-type(1) .shot__f{ height: 275px; }
-  #munchspot .gal__row:nth-of-type(2) .shot__f{ height: 225px; }
+  #munchspot .notes:last-of-type{ grid-column: 9 / -1; grid-row: 6 / span 2; }
+  #munchspot .gal__row:nth-of-type(2){ grid-column: 1 / 9; grid-row: 7; }
+  #munchspot .gal__row:nth-of-type(1) .shot__f{ height: 297px; }
+  /* Over eight columns instead of twelve this frame shows nearly two thirds of
+     the top view at the same depth of sheet, where across the full measure it
+     was showing two fifths of it. */
+  #munchspot .gal__row:nth-of-type(2) .shot__f{ height: 257px; }
 
   /* ---------- where the sheets end ----------
      A forced break before a grid item breaks before the row it sits in, so one
@@ -376,7 +395,9 @@
      apart. */
   #hydrofoil > .wrap > .phead__meta > .lede{ break-before: page; }
   #lc01 .label.subhead{ break-before: page; }
-  #lc01 .gal__row:nth-of-type(2){ break-before: page; }
+  /* Not forced: the sheet above it now ends close enough to the paper that a
+     forced break there produces an empty sheet, and the plates that follow
+     cannot fit in what is left anyway. */
   /* Munchspot's opening sheet ends four pixels short of the paper, and a
      forced break that close to one produces an empty sheet after it: the
      engine has already ended the page by the time it is told to. The detail
