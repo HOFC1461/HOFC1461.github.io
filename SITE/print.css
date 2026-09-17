@@ -278,16 +278,16 @@
   #hydrofoil .gal__row:nth-of-type(3){ display: contents; }
   #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(1){ grid-column: 1 / 5; grid-row: 6; }
   #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(2){ grid-column: 5 / 9; grid-row: 6; }
-  /* The notes run down both rows rather than sitting in the first: it keeps
-     the top right corner from going blank, and it frees the plate below from
-     having to span the sheet. Which is what buys the picture back -- across
-     the full measure that frame was showing a third of its own height; over
-     eight columns it shows more than half at the same depth of sheet. */
-  #hydrofoil .notes:last-of-type{ grid-column: 9 / -1; grid-row: 6 / span 2; }
+  /* The two views and the notes share the top of the sheet in three narrow
+     columns, which is what leaves the plate below the whole width of the
+     paper -- edges included. */
+  #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(1){ grid-column: 1 / 4; }
+  #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(2){ grid-column: 4 / 7; }
+  #hydrofoil .notes:last-of-type{ grid-column: 7 / -1; grid-row: 6; }
   #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(3){
-    grid-column: 1 / 9; grid-row: 7; margin-top: 10mm;
+    grid-column: 1 / -1; grid-row: 7; margin-top: 10mm;
   }
-  #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(3) .shot__f{ height: 340px; }
+  #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(3) .shot__f{ height: 330px; }
   /* A band cut out of the middle of this render is the widest part of the
      board and nothing else. Taken from the foot of the frame it lands on the
      nose, which is the end that says what shape the thing is. */
@@ -384,15 +384,17 @@
      of five slats is a thing that can be read as a band. */
   #munchspot .label.subhead{ grid-column: 1 / -1; grid-row: 5; margin-bottom: var(--s3); }
   #munchspot .gal__row:nth-of-type(1){ display: contents; }
-  #munchspot .gal__row:nth-of-type(1) .shot:nth-child(1){ grid-column: 1 / 5; grid-row: 6; }
-  #munchspot .gal__row:nth-of-type(1) .shot:nth-child(2){ grid-column: 5 / 9; grid-row: 6; }
-  #munchspot .notes:last-of-type{ grid-column: 9 / -1; grid-row: 6 / span 2; }
-  #munchspot .gal__row:nth-of-type(2){ grid-column: 1 / 9; grid-row: 7; }
-  #munchspot .gal__row:nth-of-type(1) .shot__f{ height: 297px; }
-  /* Over eight columns instead of twelve this frame shows nearly two thirds of
-     the top view at the same depth of sheet, where across the full measure it
-     was showing two fifths of it. */
-  #munchspot .gal__row:nth-of-type(2) .shot__f{ height: 257px; }
+  #munchspot .gal__row:nth-of-type(1) .shot:nth-child(1){ grid-column: 1 / 4; grid-row: 6; }
+  #munchspot .gal__row:nth-of-type(1) .shot:nth-child(2){ grid-column: 4 / 7; grid-row: 6; }
+  #munchspot .notes:last-of-type{ grid-column: 7 / -1; grid-row: 6; }
+  #munchspot .gal__row:nth-of-type(2){ grid-column: 1 / -1; grid-row: 7; }
+  #munchspot .gal__row:nth-of-type(1) .shot__f{ height: 220px; }
+  /* The long plate at the foot of each of these two sheets runs the whole
+     width of the paper, gutters included: an image cut to a band is a band,
+     and a band that stops short of the edge on both sides reads as a picture
+     that did not fit rather than one that was cut on purpose. The caption
+     stays inside the gutter, where every other caption in the document is. */
+  #munchspot .gal__row:nth-of-type(2) .shot__f{ height: 285px; }
   /* Taken from the top of the frame instead of its middle: the bench runs off
      the bottom edge, cut, and the studio ground stays above it. A top view
      centred in a band reads as a fragment; cut at one edge only, it reads as
@@ -407,30 +409,39 @@
      are held to a height and taken from the top -- the line of type is at the
      top of every one of them, and what a crop can spare is the empty ground
      under the chart. */
-  #smartmoney .t-poster{ font-size: 152px !important; }   /* ten letters */
+  #motion .t-poster{ font-size: 152px !important; }   /* ten letters */
 
   /* The film itself cannot be printed. Three of its frames are already the
      opening plate of this project, which is the closest a sheet gets. */
-  #smartmoney .frame--film{ display: none; }
+  #motion .frame--film{ display: none; }
 
-  #smartmoney > .wrap > .phead__meta > .lede{ grid-column: 8 / -1; grid-row: 3; }
-  #smartmoney .spec{ grid-column: 8 / -1; grid-row: 4; }
-  #smartmoney .gal__row:nth-of-type(1){ grid-column: 1 / 9; grid-row: 3 / span 2; }
-  #smartmoney > .wrap > .phead__meta > .lede,
-  #smartmoney .spec{ grid-column: 9 / -1; }
-  #smartmoney .split > div{
+  #motion > .wrap > .phead__meta > .lede{ grid-column: 8 / -1; grid-row: 3; }
+  #motion .spec{ grid-column: 8 / -1; grid-row: 4; }
+  #motion .gal__row:nth-of-type(1){ grid-column: 1 / 9; grid-row: 3 / span 2; }
+  #motion > .wrap > .phead__meta > .lede,
+  #motion .spec{ grid-column: 9 / -1; }
+  #motion .split > div{
     grid-column: 1 / -1; grid-row: 5;
     display: grid; grid-template-columns: repeat(3, 1fr);
     gap: var(--s4); align-items: start; margin-top: 10mm;
   }
-  #smartmoney .split > div > div{ margin-bottom: 0 !important; }
+  #motion .split > div > div{ margin-bottom: 0 !important; }
 
-  #smartmoney .gal__row:nth-of-type(2){ grid-column: 1 / -1; grid-row: 6; }
-  #smartmoney .gal__row:nth-of-type(2) .shot__f{ height: 440px; }
-  #smartmoney .gal__row:nth-of-type(2) .shot__f img{ object-position: 50% 0%; }
-  #smartmoney .notes:last-of-type{
+  #motion .gal__row:nth-of-type(2){ grid-column: 1 / -1; grid-row: 6; }
+  #motion .gal__row:nth-of-type(2) .shot__f{ height: 440px; }
+  #motion .gal__row:nth-of-type(2) .shot__f img{ object-position: 50% 0%; }
+  #motion .notes:last-of-type{
     grid-column: 1 / -1; grid-row: 7;
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(3),
+  #munchspot .gal__row:nth-of-type(2) .shot{
+    margin-inline: calc(var(--gutter) * -1);
+  }
+  #hydrofoil .gal__row:nth-of-type(3) .shot:nth-child(3) .shot__cap,
+  #munchspot .gal__row:nth-of-type(2) .shot .shot__cap{
+    padding-inline: var(--gutter);
   }
 
   /* ---------- where the sheets end ----------
@@ -439,7 +450,7 @@
      sheet carry the air instead of the break, which is why the two are listed
      apart. */
   #hydrofoil > .wrap > .phead__meta > .lede{ break-before: page; }
-  #smartmoney > .wrap > .phead__meta > .lede{ break-before: page; }
+  #motion > .wrap > .phead__meta > .lede{ break-before: page; }
   #lc01 .label.subhead{ break-before: page; }
   /* Not forced: the sheet above it now ends close enough to the paper that a
      forced break there produces an empty sheet, and the plates that follow
@@ -457,8 +468,8 @@
   #lc01 :is(.label.subhead),
   #lc01 :is(.gal__row:nth-of-type(2)),
   #munchspot :is(.label.subhead),
-  #smartmoney :is(.phead__meta > .lede, .gal__row:nth-of-type(1)),
-  #smartmoney :is(.gal__row:nth-of-type(2)){
+  #motion :is(.phead__meta > .lede, .gal__row:nth-of-type(1)),
+  #motion :is(.gal__row:nth-of-type(2)){
     margin-top: 0;
     padding-top: 10mm;
   }

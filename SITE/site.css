@@ -601,7 +601,7 @@ body > .hero{ scroll-margin-top: 0; }
    to the proportion it was shot for -- a phone -- it sits beside what is
    written about it instead of pushing it off the screen. */
 @media (min-width: 900px){
-  #smartmoney .split{ grid-template-columns: .62fr 1.38fr; align-items: start; }
+  #motion .split{ grid-template-columns: .62fr 1.38fr; align-items: start; }
 }
 
 /* Any image that carries a drift needs slack to drift into, or it exposes the
