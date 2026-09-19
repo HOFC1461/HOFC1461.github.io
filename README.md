@@ -56,7 +56,17 @@ dos, español e inglés, en `dist/` —que no entra al repositorio.
 npm i -D playwright && npx playwright install chromium
 node tools/pdf.mjs                 # ambos idiomas
 node tools/pdf.mjs --lang es       # sólo uno
+node tools/pdf.mjs --only cv       # versión corta: perfil y trayectoria
 ```
+
+`--only cv` saca el currículum solo, dos hojas, para las vacantes que piden CV
+y no portafolio. Tampoco es una segunda maqueta: son las mismas dos hojas del
+documento largo, impresas sin las dieciséis restantes. `print.css` hace el
+corte bajo `html[data-print="cv"]`; ahí mismo se recompone lo poco que cambia
+—el bloque de contacto que solo existe en ese archivo, la escala de la hoja de
+trayectoria, la foto que se estira hasta donde llega el texto de al lado—.
+Las medidas están resueltas contra el inglés, que corre unos 24 px más largo
+que el español.
 
 Cualquiera puede sacar el suyo desde el navegador con Ctrl+P: `print.css` está
 enlazado en la página con `media="print"`, así que la vista previa de impresión

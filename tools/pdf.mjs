@@ -9,7 +9,11 @@
  * before the print: every image downloaded at full size, every reveal resolved,
  * the poster heads measured against the sheet rather than against a window.
  *
- *   node tools/pdf.mjs [--out DIR] [--lang es|en|both]
+ *   node tools/pdf.mjs [--out DIR] [--lang es|en|both] [--only cv]
+ *
+ * --only cv prints the short form: the profile and the career sheets alone,
+ * which is what a posting asks for when it asks for a curriculum rather than
+ * for the work. Same pass, same stylesheet -- print.css drops the rest.
  *
  * Needs Playwright's Chromium (npm i -D playwright && npx playwright install
  * chromium), or any Chromium at $CHROMIUM.
@@ -33,8 +37,11 @@ const arg = (name, fallback) => {
 };
 const OUT = resolve(arg('out', join(ROOT, 'dist')));
 const LANGS = (l => (l === 'both' ? ['es', 'en'] : [l]))(arg('lang', 'both'));
+const ONLY = arg('only', '');
 
-const FILE = { es: 'Portafolio-Hedmon-Cervantes-ES.pdf', en: 'Portfolio-Hedmon-Cervantes-EN.pdf' };
+const FILE = ONLY === 'cv'
+  ? { es: 'CV-Hedmon-Cervantes-ES.pdf', en: 'CV-Hedmon-Cervantes-EN.pdf' }
+  : { es: 'Portafolio-Hedmon-Cervantes-ES.pdf', en: 'Portfolio-Hedmon-Cervantes-EN.pdf' };
 
 /* The sheet, in CSS pixels: A4 landscape (297mm) by the content height left
    between the page margins print.css sets. The viewport is set to the same
@@ -97,6 +104,10 @@ async function main() {
        have to be solved with the print gutter in force, or they are set to the
        width of a window that is not the sheet. */
     await page.emulateMedia({ media: 'print' });
+
+    /* The cut is made in the stylesheet, not here: this only says which
+       document is being printed. */
+    if (ONLY) await page.evaluate(only => { document.documentElement.dataset.print = only; }, ONLY);
 
     /* srcset picks the variant that suits a screen at this width; on paper the
        original is the one worth carrying. Lazy images never load at all unless
