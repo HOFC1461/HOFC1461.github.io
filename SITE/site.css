@@ -359,7 +359,8 @@ body > .hero{ scroll-margin-top: 0; }
 .hero__kicker{ display: block; margin-bottom: var(--s3); }
 /* Print only -- see the comments on the elements in index.html. */
 .hero__name,
-.cv__sign{ display: none; }
+.cv__sign,
+.cv__reach{ display: none; }
 /* No rule above this row. A hairline is the page's structural mark, and it
    works because it is drawn on paper -- laid across moving footage it is a line
    with a chair passing behind it, which reads as an artefact rather than as
