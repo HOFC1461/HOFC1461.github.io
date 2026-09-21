@@ -16,6 +16,7 @@ SITE/                 lo único que se publica
   img/                imágenes optimizadas para web
   video/              portada, hydrofoil, el corto y sus tres fragmentos
 tools/pdf.mjs         imprime el sitio a PDF con Chromium
+tools/og.mjs          exporta la tarjeta de 1200x630 para compartir enlaces
 .github/workflows/    el despliegue a GitHub Pages
 MOTION.md             análisis del video de referencia y qué se tomó de él
 ```
@@ -86,6 +87,32 @@ es el mismo documento. Lo que el script agrega es el estado en que la página
 tiene que estar antes de imprimir —cada foto descargada en su tamaño original,
 cada revelado resuelto— porque nada de eso ocurre en una página que nunca se
 desplazó.
+
+## La tarjeta del enlace
+
+Cuando la dirección se pega en LinkedIn, WhatsApp, Slack o un correo, el
+rastreador lee las etiquetas Open Graph del `<head>` y dibuja una tarjeta. Sin
+ellas queda un rectángulo gris con una línea de texto —y eso es lo primero que
+ve un reclutador, antes de que la página alcance a cargar.
+
+La imagen es la portada del propio sitio, exportada al 1200×630 al que se corta
+la tarjeta:
+
+```bash
+node tools/og.mjs
+```
+
+Sale en `SITE/img/og/share.jpg` y **sí** entra al repositorio: es parte de la
+página, no del PDF. El script fuerza dos cosas que la pantalla no necesita —el
+póster del video como fondo, porque una tarjeta sólo puede ser un cuadro fijo,
+y la firma bajo el título, que en pantalla la lleva el encabezado.
+
+Las direcciones de esas etiquetas van completas —un rastreador no resuelve
+rutas relativas—, así que **si el sitio cambia de dominio hay que cambiarlas a
+mano**: son cuatro en el `<head>` (`canonical`, `og:url`, `og:image`) y dos en
+el cuerpo (el bloque "Este sitio" y la línea de contacto del CV). Búscalas con
+`grep -rn hofc1461 SITE/`. Después, en LinkedIn hay que volver a pegar el
+enlace para que regenere la tarjeta: la guarda en caché.
 
 ## Decisiones que conviene conocer antes de tocar nada
 
