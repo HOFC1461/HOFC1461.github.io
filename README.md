@@ -46,6 +46,18 @@ git add -A && git commit -m "…" && git push
 En **Settings → Pages**, *Source* debe estar en **GitHub Actions** (no en
 "Deploy from a branch").
 
+### La copia en Netlify
+
+Hay un `netlify.toml` para publicar el mismo repositorio en Netlify. Netlify no
+compila nada: sirve `SITE/` tal cual, igual que el workflow de Pages, y se
+dispara con los mismos push a `main`.
+
+Es una **copia**, no la casa. `hofc1461.github.io` es la dirección oficial —es
+la que la propia página imprime en la ficha "Este sitio"— y por eso la copia
+sale con `X-Robots-Tag: noindex`, para que no compita en los buscadores con la
+dirección buena. Si algún día Netlify pasa a ser la casa, hay que quitar ese
+encabezado y cambiar la dirección impresa en `index.html`.
+
 ## Exportar el PDF
 
 El PDF que se manda por correo sale del sitio, no de un archivo aparte: el
