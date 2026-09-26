@@ -121,6 +121,26 @@
   .spec--close{ grid-area: sheet; }
   .spec--close > div:first-child{ border-top: 0; padding-top: var(--s5); }
 
+  /* Three rows now, and the widest label is the new one. With each value simply
+     pushed off the end of its own label, PORTAFOLIO shunted its address 31px to
+     the right of the two above it, and the sheet had three values on three
+     different edges. A fixed label column holds all three to one start -- the
+     same thing .spec--cv does for the education dates -- and 7rem is the figure
+     that leaves the two existing rows exactly where they already were. */
+  .spec--close > div{
+    display: grid;
+    grid-template-columns: 7rem 1fr;
+    align-items: baseline;
+  }
+
+  /* The address, on the sheet someone turns to in order to reach him. See the
+     comment on the block in index.html for why it is only here. It is set as
+     plain lower-case text like the two rows above it, and deliberately so:
+     this file gets read by parsers as often as by people, and the letter-spaced
+     mono of the labels comes out of a text extractor as C O R R E O. An address
+     has to survive that. */
+  .close__site{ display: grid !important; }   /* the grid the three rows share, below */
+
   /* ---------- pagination ----------
      One subject per sheet. The opening frame, the statement and the closing
      band each take a whole page and are centred in it; every project starts on
@@ -144,6 +164,22 @@
   #trayectoria,
   #trabajo,
   body > article{ break-before: page; }
+
+  /* The closing band is ink to the edge on screen, where it is simply the end
+     of a scroll. On paper it was 200mm inside a 210mm sheet with nothing
+     forbidding it to break, so Chromium left the top of the box on the sheet
+     before: 21mm of black hanging under the Munchspot plate, and a last sheet
+     that stopped 32mm short of its own foot. Both read as a misprint.
+
+     So it gets what the cover gets, which has the same job at the other end of
+     the document: its own sheet, the whole 210mm, nothing else on it. min-height
+     is cleared because the shared rule above sets 200mm and a min taller than
+     the height would win. */
+  .close{
+    break-before: page;
+    height: 210mm;
+    min-height: 0;
+  }
 
   .split, .cv, .notes, .gal__row, .shot, .role,
   .spec > div, .entry, .close__head, .spec__crest,

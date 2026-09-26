@@ -360,7 +360,18 @@ body > .hero{ scroll-margin-top: 0; }
 /* Print only -- see the comments on the elements in index.html. */
 .hero__name,
 .cv__sign,
-.cv__reach{ display: none; }
+.cv__reach,
+.close__site{ display: none; }
+
+/* The one mark in this document that is not a logo, so it is not a file: a
+   globe drawn inline and handed to the same .ico component as a mask, which
+   means it inherits the size, the colour and the 55% the other two marks in
+   that sheet already have. Circle, equator, meridian -- at 15px anything more
+   is mud. */
+.close__globe{
+  --ico-r: 1;
+  --src: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2'%3E%3Ccircle cx='12' cy='12' r='9.5'/%3E%3Cpath d='M2.5 12h19'/%3E%3Cellipse cx='12' cy='12' rx='4.4' ry='9.5'/%3E%3C/svg%3E");
+}
 /* No rule above this row. A hairline is the page's structural mark, and it
    works because it is drawn on paper -- laid across moving footage it is a line
    with a chair passing behind it, which reads as an artefact rather than as
