@@ -6,7 +6,7 @@
 <title>Hedmon Cervantes &mdash; Dise&ntilde;o Industrial</title>
 <meta name="description" content="Portafolio de Hedmon Cervantes, dise&ntilde;ador industrial: Motion Lab, hydrofoil modular, sill&oacute;n LC01 y mobiliario urbano Munchspot.">
 <meta name="theme-color" content="#ebe8e2">
-<link rel="canonical" href="https://hofc1461.github.io/">
+<link rel="canonical" href="https://hedmoncervantes.netlify.app/">
 
 <!-- How the link looks when it is pasted somewhere: LinkedIn, WhatsApp, a
      mail client, Slack. Without these a crawler has a title and nothing else,
@@ -18,17 +18,24 @@
      cut to (tools/og.mjs). It is not a second design: it is the page, so the
      card and what opens after the click are the same thing.
 
-     Four addresses are written out in full here. They have to be absolute --
+     Three addresses are written out in full here. They have to be absolute --
      a crawler resolves nothing -- so if the site ever moves, these move with
-     it, together with the two in the body. -->
+     it, together with the three in the body.
+
+     The canonical is load-bearing for a second reason: the same folder is
+     served from two hosts, and two identical copies online compete with each
+     other in a search index. A header can de-index one of them on Netlify but
+     not on GitHub Pages, which serves files and nothing else. So the page
+     names its own address instead, and whichever copy a crawler reaches, this
+     is the one it credits. -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://hofc1461.github.io/">
+<meta property="og:url" content="https://hedmoncervantes.netlify.app/">
 <meta property="og:site_name" content="Hedmon Fabian Cervantes G&oacute;mez">
 <meta property="og:locale" content="es_MX">
 <meta property="og:locale:alternate" content="en_US">
 <meta property="og:title" content="Hedmon Cervantes &mdash; Dise&ntilde;o Industrial">
 <meta property="og:description" content="Producto y servicio desde la intersecci&oacute;n entre el dise&ntilde;o y los negocios: funcionalidad, experiencia de usuario y viabilidad comercial.">
-<meta property="og:image" content="https://hofc1461.github.io/img/og/share.jpg">
+<meta property="og:image" content="https://hedmoncervantes.netlify.app/img/og/share.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -156,7 +163,7 @@
         <dl class="spec cv__reach">
           <div><dt>Correo</dt><dd>hedmonf@gmail.com</dd></div>
           <div><dt>LinkedIn</dt><dd>hedmon-fabian-cervantes-g&oacute;mez</dd></div>
-          <div><dt>Portafolio</dt><dd>hofc1461.github.io</dd></div>
+          <div><dt>Portafolio</dt><dd>hedmoncervantes.netlify.app</dd></div>
           <div><dt>Ubicaci&oacute;n</dt><dd>Guadalajara, M&eacute;xico</dd></div>
         </dl>
       </div>
@@ -517,8 +524,8 @@
       <div class="note--this">
         <h3 class="note__h">Este sitio</h3>
         <p class="note__b">El portafolio que est&aacute;s leyendo sali&oacute; del mismo m&eacute;todo: el documento de InDesign como base, los recursos cargados a un proyecto de Claude Code, im&aacute;genes de producto generadas en distintas posiciones para producir los videos con Omni Flash, y nueve iteraciones de layout, texto y motion.</p>
-        <a class="note__go" href="https://hofc1461.github.io" target="_blank" rel="noopener noreferrer">
-          <span>hofc1461.github.io</span>
+        <a class="note__go" href="https://hedmoncervantes.netlify.app" target="_blank" rel="noopener noreferrer">
+          <span>hedmoncervantes.netlify.app</span>
           <svg width="14" height="10" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
             <path d="M0 5h12M8.5 1.5 12.5 5 8.5 8.5"/>
           </svg>

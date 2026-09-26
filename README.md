@@ -38,26 +38,31 @@ Y abrir <http://localhost:5501>.
 
 ## Publicar
 
-Cada `push` a `main` publica. No hay más pasos.
+Cada `push` a `main` publica, en los dos lados y sin más pasos.
 
 ```bash
 git add -A && git commit -m "…" && git push
 ```
 
-En **Settings → Pages**, *Source* debe estar en **GitHub Actions** (no en
-"Deploy from a branch").
+La dirección oficial es **<https://hedmoncervantes.netlify.app>**. Es la que la
+propia página imprime en la ficha "Este sitio", la que va en el CV y la que
+nombra el `canonical` del `index.html`.
 
-### La copia en Netlify
+Hay dos hosts y sirven la misma carpeta:
 
-Hay un `netlify.toml` para publicar el mismo repositorio en Netlify. Netlify no
-compila nada: sirve `SITE/` tal cual, igual que el workflow de Pages, y se
-dispara con los mismos push a `main`.
+| | quién lo publica | para qué |
+|---|---|---|
+| `hedmoncervantes.netlify.app` | `netlify.toml` (`publish = "SITE"`, sin build) | la casa |
+| `hofc1461.github.io` | `.github/workflows/deploy.yml` | respaldo, y la dirección vieja sigue viva |
 
-Es una **copia**, no la casa. `hofc1461.github.io` es la dirección oficial —es
-la que la propia página imprime en la ficha "Este sitio"— y por eso la copia
-sale con `X-Robots-Tag: noindex`, para que no compita en los buscadores con la
-dirección buena. Si algún día Netlify pasa a ser la casa, hay que quitar ese
-encabezado y cambiar la dirección impresa en `index.html`.
+Dos copias idénticas en línea competirían en los buscadores. Lo que lo evita es
+el `<link rel="canonical">`: nombra la dirección de Netlify, así que el
+rastreador llegue por donde llegue acredita ésa. Un encabezado `X-Robots-Tag`
+no serviría para las dos —Pages no sabe mandar encabezados— y la etiqueta sí,
+porque viaja dentro del archivo.
+
+Para que Pages siga funcionando, en **Settings → Pages** el *Source* debe estar
+en **GitHub Actions** (no en "Deploy from a branch").
 
 ## Exportar el PDF
 
@@ -108,11 +113,18 @@ póster del video como fondo, porque una tarjeta sólo puede ser un cuadro fijo,
 y la firma bajo el título, que en pantalla la lleva el encabezado.
 
 Las direcciones de esas etiquetas van completas —un rastreador no resuelve
-rutas relativas—, así que **si el sitio cambia de dominio hay que cambiarlas a
-mano**: son cuatro en el `<head>` (`canonical`, `og:url`, `og:image`) y dos en
-el cuerpo (el bloque "Este sitio" y la línea de contacto del CV). Búscalas con
-`grep -rn hofc1461 SITE/`. Después, en LinkedIn hay que volver a pegar el
-enlace para que regenere la tarjeta: la guarda en caché.
+rutas relativas—, así que **si el sitio cambia de dirección hay que cambiarlas
+a mano**. Son seis en total: tres en el `<head>` (`canonical`, `og:url`,
+`og:image`) y tres en el cuerpo (el `href` y el texto visible del bloque "Este
+sitio", y la línea de contacto del CV). Búscalas con:
+
+```bash
+grep -rn "hedmoncervantes.netlify.app" SITE/
+```
+
+Y después de cambiarlas faltan dos cosas que no están en el repositorio:
+regenerar los PDFs, porque el CV imprime la dirección, y **volver a pegar el
+enlace en LinkedIn** para que regenere la tarjeta, que la guarda en caché.
 
 ## Decisiones que conviene conocer antes de tocar nada
 
