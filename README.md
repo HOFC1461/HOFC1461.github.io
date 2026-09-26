@@ -16,6 +16,7 @@ SITE/                 lo único que se publica
   img/                imágenes optimizadas para web
   video/              portada, hydrofoil, el corto y sus tres fragmentos
 tools/pdf.mjs         imprime el sitio a PDF con Chromium
+tools/og.mjs          exporta la tarjeta de 1200x630 para compartir enlaces
 .github/workflows/    el despliegue a GitHub Pages
 MOTION.md             análisis del video de referencia y qué se tomó de él
 ```
@@ -37,26 +38,31 @@ Y abrir <http://localhost:5501>.
 
 ## Publicar
 
-Cada `push` a `main` publica. No hay más pasos.
+Cada `push` a `main` publica, en los dos lados y sin más pasos.
 
 ```bash
 git add -A && git commit -m "…" && git push
 ```
 
-En **Settings → Pages**, *Source* debe estar en **GitHub Actions** (no en
-"Deploy from a branch").
+La dirección oficial es **<https://hedmoncervantes.netlify.app>**. Es la que la
+propia página imprime en la ficha "Este sitio", la que va en el CV y la que
+nombra el `canonical` del `index.html`.
 
-### La copia en Netlify
+Hay dos hosts y sirven la misma carpeta:
 
-Hay un `netlify.toml` para publicar el mismo repositorio en Netlify. Netlify no
-compila nada: sirve `SITE/` tal cual, igual que el workflow de Pages, y se
-dispara con los mismos push a `main`.
+| | quién lo publica | para qué |
+|---|---|---|
+| `hedmoncervantes.netlify.app` | `netlify.toml` (`publish = "SITE"`, sin build) | la casa |
+| `hofc1461.github.io` | `.github/workflows/deploy.yml` | respaldo, y la dirección vieja sigue viva |
 
-Es una **copia**, no la casa. `hofc1461.github.io` es la dirección oficial —es
-la que la propia página imprime en la ficha "Este sitio"— y por eso la copia
-sale con `X-Robots-Tag: noindex`, para que no compita en los buscadores con la
-dirección buena. Si algún día Netlify pasa a ser la casa, hay que quitar ese
-encabezado y cambiar la dirección impresa en `index.html`.
+Dos copias idénticas en línea competirían en los buscadores. Lo que lo evita es
+el `<link rel="canonical">`: nombra la dirección de Netlify, así que el
+rastreador llegue por donde llegue acredita ésa. Un encabezado `X-Robots-Tag`
+no serviría para las dos —Pages no sabe mandar encabezados— y la etiqueta sí,
+porque viaja dentro del archivo.
+
+Para que Pages siga funcionando, en **Settings → Pages** el *Source* debe estar
+en **GitHub Actions** (no en "Deploy from a branch").
 
 ## Exportar el PDF
 
@@ -68,7 +74,47 @@ dos, español e inglés, en `dist/` —que no entra al repositorio.
 npm i -D playwright && npx playwright install chromium
 node tools/pdf.mjs                 # ambos idiomas
 node tools/pdf.mjs --lang es       # sólo uno
+node tools/pdf.mjs --only cv       # versión corta: perfil y trayectoria
+node tools/pdf.mjs --light         # el mismo documento, por debajo de 2 MB
 ```
+
+`--only cv` saca el currículum solo, dos hojas, para las vacantes que piden CV
+y no portafolio. Tampoco es una segunda maqueta: son las mismas dos hojas del
+documento largo, impresas sin las dieciséis restantes. `print.css` hace el
+corte bajo `html[data-print="cv"]`; ahí mismo se recompone lo poco que cambia
+—el bloque de contacto que solo existe en ese archivo, la escala de la hoja de
+trayectoria, la foto que se estira hasta donde llega el texto de al lado—.
+Las medidas están resueltas contra el inglés, que corre unos 24 px más largo
+que el español.
+
+### `--light`, para adjuntarlo
+
+LinkedIn no acepta adjuntos de más de 2 MB y el documento completo pesa 3.9.
+`--light` saca el mismo documento en 1.8, con el sufijo `-web` en el nombre, y
+**no toca la composición**: la página se sirve desde una copia desechable de
+`SITE/` cuyas fotografías vienen re-codificadas, así que el layout, la
+paginación y la tipografía son los mismos. Necesita `ffmpeg` en el PATH o en
+`$FFMPEG`.
+
+De dónde salen los 2 MB que sobran, medido y en orden:
+
+1. **El retrato, 1.27 MB de los 3.9 —un tercio del archivo por una sola foto.**
+   `.portrait` lleva `filter: grayscale()`, y un filtro CSS obliga a Chromium a
+   rasterizar la imagen él mismo y a incrustar el resultado **sin pérdida**, en
+   PNG, al doble del tamaño de maqueta: 1812×1550 px de una foto que en la hoja
+   mide 906. Así que el gris se hornea en el archivo con ffmpeg y a `.portrait`
+   se le quita el filtro: la misma foto viaja como un JPEG de 150 KB. Ése es el
+   motivo por el que existe este modo.
+2. **Los JPEG se recortan a 1600 px de ancho y se recomprimen** a `-q:v 5`. La
+   lámina más ancha del documento se imprime a 1123 px, así que el tope no se
+   ve. Los íconos no se tocan: son máscaras PNG con canal alfa, pesan unos
+   kilobytes, y una pasada con pérdida sobre un alfa es cómo una máscara se
+   vuelve lodo.
+3. **`deviceScaleFactor` baja a 1**, que es puro seguro: lo único que compraba
+   el 2× era el rasterizado sin pérdida que este modo existe para evitar.
+
+Resultado: 3.48 MB de imágenes incrustadas bajan a 1.40, y el archivo de 3.94 a
+1.78. La copia desechable se borra al terminar.
 
 Cualquiera puede sacar el suyo desde el navegador con Ctrl+P: `print.css` está
 enlazado en la página con `media="print"`, así que la vista previa de impresión
@@ -76,6 +122,40 @@ es el mismo documento. Lo que el script agrega es el estado en que la página
 tiene que estar antes de imprimir —cada foto descargada en su tamaño original,
 cada revelado resuelto— porque nada de eso ocurre en una página que nunca se
 desplazó.
+
+## La tarjeta del enlace
+
+Cuando la dirección se pega en LinkedIn, WhatsApp, Slack o un correo, el
+rastreador lee las etiquetas Open Graph del `<head>` y dibuja una tarjeta. Sin
+ellas queda un rectángulo gris con una línea de texto —y eso es lo primero que
+ve un reclutador, antes de que la página alcance a cargar.
+
+La imagen es la portada del propio sitio, exportada al 1200×630 al que se corta
+la tarjeta:
+
+```bash
+node tools/og.mjs
+```
+
+Sale en `SITE/img/og/share.jpg` y **sí** entra al repositorio: es parte de la
+página, no del PDF. El script fuerza dos cosas que la pantalla no necesita —el
+póster del video como fondo, porque una tarjeta sólo puede ser un cuadro fijo,
+y la firma bajo el título, que en pantalla la lleva el encabezado.
+
+Las direcciones de esas etiquetas van completas —un rastreador no resuelve
+rutas relativas—, así que **si el sitio cambia de dirección hay que cambiarlas
+a mano**. Son ocho en total: tres en el `<head>` (`canonical`, `og:url`,
+`og:image`) y cinco en el cuerpo (el `href` y el texto visible del bloque "Este
+sitio", los mismos dos de la fila PORTAFOLIO de la hoja de contacto, y la línea
+de contacto del CV). Búscalas con:
+
+```bash
+grep -rn "hedmoncervantes.netlify.app" SITE/
+```
+
+Y después de cambiarlas faltan dos cosas que no están en el repositorio:
+regenerar los PDFs, porque el CV imprime la dirección, y **volver a pegar el
+enlace en LinkedIn** para que regenere la tarjeta, que la guarda en caché.
 
 ## Decisiones que conviene conocer antes de tocar nada
 
@@ -139,6 +219,15 @@ desplazó.
   archivo— y no una columna de texto. Y un `break-before: page` forzado justo
   después de contenido que ya llega al canto produce una hoja en blanco: donde
   pase, se quita el forzado y se deja que la página rompa sola.
+- **La dirección tiene que sobrevivir a un extractor de texto.** Este PDF lo
+  leen tanto personas como filtros automáticos, y las etiquetas de este
+  documento llevan `letter-spacing`, que sale de un extractor como
+  `C O R R E O`. Por eso la dirección está dos veces y ninguna en mayúsculas
+  espaciadas: en la ficha "Este sitio" y como tercera fila de la hoja de
+  contacto, en minúsculas y con el mismo cuerpo que el correo. Además las dos
+  son `<a href>`, así que el PDF lleva la URL completa también como anotación
+  de enlace, que es lo que lee un parser sin mirar el texto. Si algo de esto
+  cambia, verificar con `page.get_text()` y `page.get_links()`, no a ojo.
 - **Idioma.** El interruptor cambia el `lang` del documento. Texto nuevo necesita
   su entrada en el diccionario de `index.html`; abrir la página en
   `#i18n-audit` lista lo que no está cubierto.

@@ -3,9 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hedmon Cervantes — Diseño Industrial</title>
-<meta name="description" content="Portafolio de Hedmon Cervantes, diseñador industrial: hydrofoil modular, sillón LC01 y mobiliario urbano Munchspot.">
+<title>Hedmon Cervantes &mdash; Dise&ntilde;o Industrial</title>
+<meta name="description" content="Portafolio de Hedmon Cervantes, dise&ntilde;ador industrial: Motion Lab, hydrofoil modular, sill&oacute;n LC01 y mobiliario urbano Munchspot.">
 <meta name="theme-color" content="#ebe8e2">
+<link rel="canonical" href="https://hedmoncervantes.netlify.app/">
+
+<!-- How the link looks when it is pasted somewhere: LinkedIn, WhatsApp, a
+     mail client, Slack. Without these a crawler has a title and nothing else,
+     and the card comes out as a grey rectangle with a line of text in it --
+     which is the first thing a recruiter sees of a portfolio, before the page
+     has had a chance to load.
+
+     The image is the site's own cover, exported at the 1200x630 the card is
+     cut to (tools/og.mjs). It is not a second design: it is the page, so the
+     card and what opens after the click are the same thing.
+
+     Three addresses are written out in full here. They have to be absolute --
+     a crawler resolves nothing -- so if the site ever moves, these move with
+     it, together with the three in the body.
+
+     The canonical is load-bearing for a second reason: the same folder is
+     served from two hosts, and two identical copies online compete with each
+     other in a search index. A header can de-index one of them on Netlify but
+     not on GitHub Pages, which serves files and nothing else. So the page
+     names its own address instead, and whichever copy a crawler reaches, this
+     is the one it credits. -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hedmoncervantes.netlify.app/">
+<meta property="og:site_name" content="Hedmon Fabian Cervantes G&oacute;mez">
+<meta property="og:locale" content="es_MX">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:title" content="Hedmon Cervantes &mdash; Dise&ntilde;o Industrial">
+<meta property="og:description" content="Producto y servicio desde la intersecci&oacute;n entre el dise&ntilde;o y los negocios: funcionalidad, experiencia de usuario y viabilidad comercial.">
+<meta property="og:image" content="https://hedmoncervantes.netlify.app/img/og/share.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Portada del portafolio: tres sillas de madera suspendidas sobre fondo hueso, bajo la palabra Portafolio.">
+<meta name="twitter:card" content="summary_large_image">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -118,6 +153,19 @@
           <p class="lede i18n" lang="es">Mis intereses en las finanzas, los activos digitales, la tecnolog&iacute;a y la estrategia complementan esta visi&oacute;n, permiti&eacute;ndome integrar diversas perspectivas al momento de dise&ntilde;ar.</p>
           <p class="lede i18n" lang="en">I believe design is not only about addressing needs but also about building meaningful connections with people, enabling me to act with empathy while driving measurable impact.</p>
         </div>
+
+        <!-- CV export only. A curriculum that travels on its own -- separated
+             from the portfolio, forwarded, printed by whoever received it --
+             has to say how to answer it, and the closing section that carries
+             these on the web is not in that file. On screen, and in the full
+             portfolio, it would be the second copy of the same four lines, so
+             it stays hidden there. -->
+        <dl class="spec cv__reach">
+          <div><dt>Correo</dt><dd>hedmonf@gmail.com</dd></div>
+          <div><dt>LinkedIn</dt><dd>hedmon-fabian-cervantes-g&oacute;mez</dd></div>
+          <div><dt>Portafolio</dt><dd>hedmoncervantes.netlify.app</dd></div>
+          <div><dt>Ubicaci&oacute;n</dt><dd>Guadalajara, M&eacute;xico</dd></div>
+        </dl>
       </div>
     </div>
 
@@ -476,8 +524,8 @@
       <div class="note--this">
         <h3 class="note__h">Este sitio</h3>
         <p class="note__b">El portafolio que est&aacute;s leyendo sali&oacute; del mismo m&eacute;todo: el documento de InDesign como base, los recursos cargados a un proyecto de Claude Code, im&aacute;genes de producto generadas en distintas posiciones para producir los videos con Omni Flash, y nueve iteraciones de layout, texto y motion.</p>
-        <a class="note__go" href="https://hofc1461.github.io" target="_blank" rel="noopener noreferrer">
-          <span>hofc1461.github.io</span>
+        <a class="note__go" href="https://hedmoncervantes.netlify.app" target="_blank" rel="noopener noreferrer">
+          <span>hedmoncervantes.netlify.app</span>
           <svg width="14" height="10" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
             <path d="M0 5h12M8.5 1.5 12.5 5 8.5 8.5"/>
           </svg>
@@ -845,6 +893,18 @@
           <dd><a href="https://www.linkedin.com/in/hedmon-fabian-cervantes-g%C3%B3mez"
                  target="_blank" rel="noopener noreferrer"><i class="ico" style="--src:url(img/icon/linkedin.png);--ico-r:0.96" aria-hidden="true"></i><span>hedmon-fabian-cervantes-g&oacute;mez</span></a></dd>
         </div>
+        <!-- PDF only. On screen the address bar already says where you are, so
+             this would be the page telling you its own name; in a file that
+             travels on its own it is the one line that gets you back to the
+             live thing. The ficha "Este sitio" names it too, but that is a
+             paragraph in the middle of a project -- this is the sheet someone
+             turns to when they want to reach you. Its mark is a mask drawn in
+             site.css, because there is no globe among the tool icons. -->
+        <div class="close__site">
+          <dt>Portafolio</dt>
+          <dd><a href="https://hedmoncervantes.netlify.app"
+                 target="_blank" rel="noopener noreferrer"><i class="ico close__globe" aria-hidden="true"></i><span>hedmoncervantes.netlify.app</span></a></dd>
+        </div>
       </dl>
     </div>
 
@@ -966,6 +1026,7 @@
     'Diseñador': 'Designer',
     'Estado': 'Status',
     'Correo': 'Email',
+    'Ubicación': 'Location',
     '1 mes': '1 month',
     '2 meses': '2 months',
     '3 meses': '3 months',

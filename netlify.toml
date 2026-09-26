@@ -13,14 +13,14 @@
 # así que un max-age largo serviría la foto vieja durante días. El comportamiento
 # por defecto de Netlify (ETag y revalidación) es el correcto para este sitio.
 
-# Esta copia no se indexa. hofc1461.github.io es la dirección oficial —la que
-# la propia página imprime en la ficha "Este sitio"— y dos copias idénticas en
-# línea compiten en los buscadores: sin esto, un día el enlace que sale primero
-# en Google podría ser el .netlify.app y no el tuyo.
+# Aquí estaba un X-Robots-Tag: noindex, de cuando esta copia no era la casa. Ya
+# lo es: hedmoncervantes.netlify.app es la dirección oficial, la que la propia
+# página imprime en la ficha "Este sitio" y la que va en el CV. Un noindex ahora
+# haría justo lo contrario de lo que se busca —dejar la dirección buena fuera de
+# Google— así que se quita.
 #
-# Si Netlify pasara a ser la casa, esto se borra y se actualiza la dirección
-# impresa en index.html. Mientras sea una copia, se queda.
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Robots-Tag = "noindex"
+# El repositorio se sigue publicando también en GitHub Pages, y las dos copias
+# son idénticas. Lo que evita que compitan es el <link rel="canonical"> del
+# index.html, que nombra esta dirección: el rastreador llegue por donde llegue,
+# acredita ésta. Un encabezado no serviría, porque Pages no sabe mandar
+# encabezados; la etiqueta viaja dentro del archivo y funciona en las dos.

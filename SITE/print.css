@@ -121,6 +121,26 @@
   .spec--close{ grid-area: sheet; }
   .spec--close > div:first-child{ border-top: 0; padding-top: var(--s5); }
 
+  /* Three rows now, and the widest label is the new one. With each value simply
+     pushed off the end of its own label, PORTAFOLIO shunted its address 31px to
+     the right of the two above it, and the sheet had three values on three
+     different edges. A fixed label column holds all three to one start -- the
+     same thing .spec--cv does for the education dates -- and 7rem is the figure
+     that leaves the two existing rows exactly where they already were. */
+  .spec--close > div{
+    display: grid;
+    grid-template-columns: 7rem 1fr;
+    align-items: baseline;
+  }
+
+  /* The address, on the sheet someone turns to in order to reach him. See the
+     comment on the block in index.html for why it is only here. It is set as
+     plain lower-case text like the two rows above it, and deliberately so:
+     this file gets read by parsers as often as by people, and the letter-spaced
+     mono of the labels comes out of a text extractor as C O R R E O. An address
+     has to survive that. */
+  .close__site{ display: grid !important; }   /* the grid the three rows share, below */
+
   /* ---------- pagination ----------
      One subject per sheet. The opening frame, the statement and the closing
      band each take a whole page and are centred in it; every project starts on
@@ -144,6 +164,22 @@
   #trayectoria,
   #trabajo,
   body > article{ break-before: page; }
+
+  /* The closing band is ink to the edge on screen, where it is simply the end
+     of a scroll. On paper it was 200mm inside a 210mm sheet with nothing
+     forbidding it to break, so Chromium left the top of the box on the sheet
+     before: 21mm of black hanging under the Munchspot plate, and a last sheet
+     that stopped 32mm short of its own foot. Both read as a misprint.
+
+     So it gets what the cover gets, which has the same job at the other end of
+     the document: its own sheet, the whole 210mm, nothing else on it. min-height
+     is cleared because the shared rule above sets 200mm and a min taller than
+     the height would win. */
+  .close{
+    break-before: page;
+    height: 210mm;
+    min-height: 0;
+  }
 
   .split, .cv, .notes, .gal__row, .shot, .role,
   .spec > div, .entry, .close__head, .spec__crest,
@@ -592,4 +628,70 @@
   /* On paper an underlined mailto reads as a smudge; the address is already
      written out in full beside its label. */
   a{ text-decoration: none; }
+
+  /* ---------- the CV, on its own ----------
+     A job posting asks for a curriculum far more often than it asks for a
+     portfolio, and the two sheets that answer that -- the profile and the
+     career -- are already composed inside the document. So the short form is
+     not a second layout either: it is the same two sheets, printed without the
+     eighteen around them.
+
+     Everything the export drops is dropped at the top level, so the rule
+     survives anything added to the page later: the two sheets are named, and
+     whatever else the body holds is not printed.
+
+     `tools/pdf.mjs --only cv` sets the attribute. */
+  html[data-print="cv"] > body > *:not(#perfil):not(#trayectoria){ display: none !important; }
+
+  /* The profile opens the file now, and a page break before the first page is
+     a blank sheet in front of it. */
+  html[data-print="cv"] #perfil{ break-before: auto; }
+
+  /* Four lines that only exist in this file -- see the comment on the block in
+     index.html. Set at the foot of the profile column, under the air that
+     separates them from the last paragraph of the bio, they read as the spec
+     sheet of the person the way every project here opens with the spec sheet
+     of the thing.
+
+     They also cost the sheet 160 points it did not have, which is what the
+     rest of this block pays for. The scale comes in a step, the way the
+     career sheet already tightens itself, and the two rules the block adds
+     are both set against that same scale rather than in figures of their
+     own. */
+  html[data-print="cv"] #perfil{ --s4: 1rem; --s6: 1.75rem; }
+  html[data-print="cv"] #perfil .band{ padding-block: 10mm; }
+  html[data-print="cv"] .cv__reach{ display: block; margin-top: var(--s6); }
+  html[data-print="cv"] .cv__reach > div{ padding-block: var(--s1); }
+  html[data-print="cv"] #perfil .cv__sign{
+    margin-top: var(--s5);
+    padding-top: var(--s3);
+  }
+
+  /* And the photograph follows the text down. Given its own ratio it stops
+     short of the column beside it -- on the portfolio sheet that column is the
+     bio alone and the two land together, here it is the bio plus four rows --
+     and a plate that ends above the text it sits beside is the one thing this
+     layout does not do. So on this sheet the ratio yields: the figure takes
+     the height of the row and the photograph is cropped to it, by 9% of its
+     own width, which is less than the 4:5 crop the site itself asks of it. */
+  html[data-print="cv"] #perfil .split{ align-items: stretch; }
+  html[data-print="cv"] #perfil .frame{ aspect-ratio: auto !important; height: auto; }
+  html[data-print="cv"] #perfil .frame img{ position: absolute; inset: 0; }
+
+  /* The career sheet is tightened above because in the portfolio it follows
+     eighteen other sheets and has to hold everything on one of them. Here it
+     is the back of a two-page document, so the same scale is re-cut for the
+     room it actually has: the steps that set the air between the rows open
+     up, which lets the education column reach down the sheet instead of
+     stopping two thirds of the way and leaving the corner empty, and the one
+     that sets the gap between whole blocks closes to pay for it.
+
+     English is what the figures are solved against. It runs 24 points longer
+     than Spanish here -- the same nine roles and certificates, in a language
+     that says them in more words -- and a sheet that fits one language is not
+     a sheet. */
+  html[data-print="cv"] #trayectoria{
+    --s3: .75rem; --s4: .9rem; --s5: 1.1rem; --s6: 1.3rem; --s7: 1.55rem;
+  }
+  html[data-print="cv"] #trayectoria .band{ padding-block: 11mm; }
 }
